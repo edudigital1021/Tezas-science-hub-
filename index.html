@@ -50,7 +50,7 @@
     <!-- App Shell -->
     <div id="app">
         
-        <!-- Sidebar Overlay (Click to close) -->
+        <!-- Sidebar Overlay -->
         <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
 
         <!-- Sidebar -->
@@ -61,7 +61,7 @@
                         <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
                             <i data-lucide="book-open" class="text-white"></i>
                         </div>
-                        <h1 class="text-xl font-bold tracking-tight" id="sidebar-brand">TSH SCIENCE</h1>
+                        <h1 class="text-xl font-bold tracking-tight">TSH SCIENCE</h1>
                     </div>
                     <button onclick="toggleSidebar()" class="lg:hidden p-2 hover:bg-white/10 rounded-xl">
                         <i data-lucide="x"></i>
@@ -75,14 +75,16 @@
                     <button onclick="switchTab('library')" id="btn-library" class="w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all opacity-70 hover:opacity-100">
                         <i data-lucide="library"></i> <span class="font-medium">My Library</span>
                     </button>
-                    <button onclick="switchTab('cart')" id="btn-cart" class="w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all opacity-70 hover:opacity-100">
+                    <button onclick="switchTab('cart')" id="btn-cart" class="w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all opacity-70 hover:opacity-100 relative">
                         <i data-lucide="shopping-cart"></i> <span class="font-medium">My Cart</span>
                         <span id="cart-badge" class="ml-auto bg-pink-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full hidden">0</span>
                     </button>
                 </nav>
 
+                <!-- Auth UI Section -->
                 <div class="mt-auto pt-6 border-t border-white/10" id="auth-container">
-                    <button onclick="simulateLogin()" class="w-full flex items-center gap-4 px-4 py-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold shadow-xl hover:scale-[1.02] transition-all">
+                    <!-- Dynamic Auth Content (Login or Profile) -->
+                    <button onclick="loginWithGoogle()" class="w-full flex items-center gap-4 px-4 py-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold shadow-xl hover:scale-[1.02] transition-all">
                         <i data-lucide="user"></i> <span>Login with Google</span>
                     </button>
                 </div>
@@ -93,16 +95,14 @@
         <main class="lg:ml-72 min-h-screen flex flex-col">
             <header class="sticky top-0 z-30 p-4 lg:px-8 flex items-center justify-between backdrop-blur-md border-b border-white/5 bg-slate-950/50">
                 <button onclick="toggleSidebar()" class="lg:hidden p-2 hover:bg-white/5 rounded-xl"><i data-lucide="menu"></i></button>
-                <div class="flex-1 text-center lg:text-left"><h2 class="text-xl md:text-2xl font-black tracking-tight" id="header-brand">TEZAS SCIENCE HUB</h2></div>
+                <div class="flex-1 text-center lg:text-left"><h2 class="text-xl md:text-2xl font-black tracking-tight">TEZAS SCIENCE HUB</h2></div>
                 <button onclick="openSearch()" class="p-3 bg-white/5 border border-white/10 rounded-2xl hover:bg-indigo-600 transition-all"><i data-lucide="search"></i></button>
             </header>
 
-            <div id="page-content" class="flex-1 p-4 lg:p-8 space-y-8 pb-24">
-                <!-- Content will be injected here -->
-            </div>
+            <div id="page-content" class="flex-1 p-4 lg:p-8 space-y-8 pb-24"></div>
         </main>
 
-        <!-- Mobile Bottom Nav -->
+        <!-- Mobile Nav -->
         <div class="fixed bottom-4 left-4 right-4 h-16 bg-slate-900/90 border border-white/20 backdrop-blur-xl rounded-2xl flex items-center justify-around lg:hidden z-40 shadow-2xl">
             <button onclick="switchTab('home')" class="p-2 opacity-100 text-indigo-500"><i data-lucide="home"></i></button>
             <button onclick="switchTab('library')" class="p-2 opacity-40"><i data-lucide="library"></i></button>
@@ -111,146 +111,172 @@
         </div>
     </div>
 
-    <!-- Search Overlay -->
-    <div id="search-overlay" class="fixed inset-0 z-[100] bg-slate-950/95 backdrop-blur-2xl p-6 hidden">
-        <div class="max-w-4xl mx-auto w-full">
-            <div class="flex items-center gap-4 border-b border-white/10 pb-4">
-                <i data-lucide="search" class="text-indigo-400"></i>
-                <input type="text" id="search-input" placeholder="Search notes..." class="bg-transparent text-2xl font-bold w-full outline-none" oninput="handleSearch(this.value)">
-                <button onclick="closeSearch()" class="p-2"><i data-lucide="x"></i></button>
-            </div>
-            <div id="search-results" class="mt-8 space-y-4 max-h-[70vh] overflow-y-auto pr-2 no-scrollbar"></div>
-        </div>
-    </div>
-
-    <!-- Modals (Payment, Product Detail, etc) are injected dynamically -->
+    <!-- Modals -->
     <div id="modal-container"></div>
-
-    <!-- Toast -->
     <div id="toast" class="hidden fixed bottom-24 left-1/2 -translate-x-1/2 z-[100] px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-3 border bg-indigo-500/90 border-indigo-400 text-white backdrop-blur-md animate-bounce-short">
-        <i id="toast-icon" data-lucide="check-circle"></i>
-        <span id="toast-msg">Success!</span>
+        <i data-lucide="check-circle"></i><span id="toast-msg">Success!</span>
     </div>
 
     <!-- Scripts -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, onSnapshot, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Firebase Configuration (Integrated from user query)
         const firebaseConfig = {
             apiKey: "AIzaSyBGMxWchCXI-ow5yHkEnKn4APs39GeB5WM",
-            authDomain: "tejas-science-hub.firebaseapp.com",
-            projectId: "tejas-science-hub",
-            storageBucket: "tejas-science-hub.firebasestorage.app",
+            authDomain: "tezas-science-hub.firebaseapp.com",
+            projectId: "tezas-science-hub",
+            storageBucket: "tezas-science-hub.firebasestorage.app",
             messagingSenderId: "515937082351",
             appId: "1:515937082351:web:f99bdab6e1708c9868341a"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        
-        // App identifier for Firestore paths
+        const provider = new GoogleAuthProvider();
         const appId = 'tezas-science-hub';
 
-        // State Management
         let user = null;
         let activeTab = 'home';
         let cart = [];
         let purchases = [];
         let filter = 'All';
         let currentBanner = 0;
-        // Functions exposed to window for HTML buttons
-        window.toggleSidebar = () => {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebar-overlay');
-            sidebar.classList.toggle('-translate-x-full');
-            overlay.classList.toggle('hidden');
+
+        // --- Auth Functions ---
+        window.loginWithGoogle = async () => {
+            try {
+                await signInWithPopup(auth, provider);
+                showToast("Welcome to TSH!", "success");
+            } catch (error) {
+                console.error(error);
+                showToast("Login failed", "error");
+            }
         };
 
+        window.logout = async () => {
+            try {
+                await signOut(auth);
+                cart = [];
+                purchases = [];
+                updateCartBadges();
+                switchTab('home');
+                showToast("Logged out safely", "success");
+            } catch (error) {
+                showToast("Error logging out", "error");
+            }
+        };
+
+        onAuthStateChanged(auth, (u) => {
+            user = u;
+            const container = document.getElementById('auth-container');
+            if (u) {
+                container.innerHTML = `
+                    <div class="flex flex-col gap-4">
+                        <div class="flex items-center gap-3 p-3 bg-white/5 rounded-2xl border border-white/10">
+                            <img src="${u.photoURL || 'https://ui-avatars.com/api/?name=User'}" class="w-10 h-10 rounded-full border border-indigo-500/30">
+                            <div class="overflow-hidden truncate">
+                                <p class="text-sm font-bold truncate">${u.displayName || 'Student'}</p>
+                                <p class="text-[10px] opacity-50 truncate">${u.email}</p>
+                            </div>
+                        </div>
+                        <button onclick="logout()" class="w-full flex items-center gap-4 px-4 py-3 rounded-2xl hover:bg-red-500/10 text-red-400 transition-colors">
+                            <i data-lucide="log-out"></i> <span class="font-medium">Logout</span>
+                        </button>
+                    </div>
+                `;
+                // Real-time purchases
+                const ref = collection(db, 'artifacts', appId, 'users', u.uid, 'purchases');
+                onSnapshot(ref, (snap) => {
+                    purchases = snap.docs.map(doc => doc.data().productId);
+                    render();
+                });
+            } else {
+                container.innerHTML = `
+                    <button onclick="loginWithGoogle()" class="w-full flex items-center gap-4 px-4 py-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold shadow-xl hover:scale-[1.02] transition-all">
+                        <i data-lucide="user"></i> <span>Login with Google</span>
+                    </button>
+                `;
+            }
+            lucide.createIcons();
+            render();
+        });
+
+        // --- Core Functions ---
         window.switchTab = (tab) => {
             activeTab = tab;
             render();
             if(window.innerWidth < 1024) toggleSidebar();
         };
 
-        window.showToast = (msg, type = 'success') => {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-msg').innerText = msg;
-            toast.classList.remove('hidden');
-            setTimeout(() => toast.classList.add('hidden'), 3000);
+        window.toggleSidebar = () => {
+            document.getElementById('sidebar').classList.toggle('-translate-x-full');
+            document.getElementById('sidebar-overlay').classList.toggle('hidden');
         };
 
         window.addToCart = (id) => {
-            if (!user) return showToast("Please login first", "error");
+            if (!user) return showToast("Please Login First", "error");
             const product = PRODUCTS.find(p => p.id === id);
-            if (purchases.includes(id)) return showToast("Already owned!", "error");
-            if (cart.find(item => item.id === id)) return showToast("Already in cart", "error");
+            if (purchases.includes(id)) return showToast("Already in Library", "error");
+            if (cart.find(i => i.id === id)) return showToast("Already in Cart", "error");
             cart.push(product);
             updateCartBadges();
-            showToast("Added to cart");
+            showToast("Added to Cart");
         };
 
         window.removeFromCart = (id) => {
-            cart = cart.filter(item => item.id !== id);
+            cart = cart.filter(i => i.id !== id);
             updateCartBadges();
             render();
         };
 
         const updateCartBadges = () => {
             const count = cart.length;
-            const b1 = document.getElementById('cart-badge');
-            const b2 = document.getElementById('cart-badge-mobile');
-            [b1, b2].forEach(b => {
+            ['cart-badge', 'cart-badge-mobile'].forEach(id => {
+                const b = document.getElementById(id);
                 b.innerText = count;
                 count > 0 ? b.classList.remove('hidden') : b.classList.add('hidden');
             });
         };
-
-        // UI Rendering Functions
         const render = () => {
             const container = document.getElementById('page-content');
             container.innerHTML = '';
-
             if (activeTab === 'home') renderHome(container);
             else if (activeTab === 'library') renderLibrary(container);
             else if (activeTab === 'cart') renderCart(container);
-
             lucide.createIcons();
         };
 
         const renderHome = (el) => {
-            // Banner
             const banner = BANNERS[currentBanner];
-            el.innerHTML += `
-                <div class="relative h-48 md:h-72 rounded-[2rem] overflow-hidden shadow-2xl bg-gradient-to-br ${banner.color} p-8 md:p-16 flex items-center">
-                    <div class="max-w-xl space-y-2 md:space-y-4">
-                        <span class="inline-block px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-bold uppercase tracking-widest">Premium Education</span>
-                        <h2 class="text-2xl md:text-5xl font-black leading-tight">${banner.title}</h2>
-                        <p class="text-sm md:text-lg opacity-90">${banner.subtitle}</p>
+            el.innerHTML = `
+                <div class="relative h-48 md:h-72 rounded-[2.5rem] overflow-hidden shadow-2xl bg-gradient-to-br ${banner.color} p-8 md:p-16 flex items-center">
+                    <div class="max-w-xl space-y-2">
+                        <span class="inline-block px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-[10px] font-bold uppercase tracking-widest">Featured Materials</span>
+                        <h2 class="text-2xl md:text-5xl font-black">${banner.title}</h2>
+                        <p class="text-xs md:text-lg opacity-90">${banner.subtitle}</p>
                     </div>
                 </div>
                 <div class="flex gap-3 overflow-x-auto pb-2 no-scrollbar">
                     ${CATEGORIES.map(cat => `
-                        <button onclick="setCategoryFilter('${cat}')" class="whitespace-nowrap px-6 py-2.5 rounded-2xl border transition-all ${filter === cat ? 'bg-indigo-600 border-indigo-500 text-white' : 'bg-white/5 border-white/10 hover:bg-white/10'}">${cat}</button>
+                        <button onclick="setFilter('${cat}')" class="whitespace-nowrap px-6 py-2.5 rounded-2xl border transition-all ${filter === cat ? 'bg-indigo-600 border-indigo-500' : 'bg-white/5 border-white/10 hover:bg-white/10'}">${cat}</button>
                     `).join('')}
                 </div>
                 <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                    ${PRODUCTS.filter(p => filter === 'All' || p.category === filter).map(product => `
+                    ${PRODUCTS.filter(p => filter === 'All' || p.category === filter).map(p => `
                         <div class="group bg-white/5 border border-white/10 rounded-[2.5rem] p-4 hover:bg-white/[0.08] transition-all cursor-pointer">
                             <div class="relative aspect-[4/3] rounded-[2rem] overflow-hidden mb-4">
-                                <img src="${product.image}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                                <div class="absolute top-4 right-4 px-3 py-1 bg-black/40 backdrop-blur-md rounded-full text-xs font-bold border border-white/20">${product.category}</div>
+                                <img src="${p.image}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                                <div class="absolute top-4 right-4 px-3 py-1 bg-black/40 backdrop-blur-md rounded-full text-[10px] font-bold border border-white/20">${p.category}</div>
                             </div>
-                            <h4 class="text-lg font-bold mb-1 truncate">${product.name}</h4>
+                            <h4 class="font-bold mb-1 truncate">${p.name}</h4>
                             <div class="flex items-center justify-between">
-                                <span class="text-2xl font-black text-indigo-400">${SITE_SETTINGS.currencySymbol}${product.price}</span>
-                                ${purchases.includes(product.id) ? 
-                                    `<button class="bg-emerald-500/10 text-emerald-400 px-4 py-2 rounded-xl text-sm font-bold border border-emerald-500/20">Owned</button>` : 
-                                    `<button onclick="addToCart('${product.id}')" class="bg-indigo-600 hover:bg-indigo-500 text-white p-3 rounded-2xl shadow-lg transition-colors"><i data-lucide="shopping-cart"></i></button>`
+                                <span class="text-xl font-black text-indigo-400">${SITE_SETTINGS.currencySymbol}${p.price}</span>
+                                ${purchases.includes(p.id) ? 
+                                    `<button class="bg-emerald-500/10 text-emerald-400 px-4 py-2 rounded-xl text-xs font-bold border border-emerald-500/20">Owned</button>` : 
+                                    `<button onclick="addToCart('${p.id}')" class="bg-indigo-600 hover:bg-indigo-500 p-3 rounded-2xl shadow-lg transition-colors"><i data-lucide="shopping-cart" size="18"></i></button>`
                                 }
                             </div>
                         </div>
@@ -262,16 +288,16 @@
         const renderLibrary = (el) => {
             el.innerHTML = `<h2 class="text-3xl font-black mb-8">My Study <span class="text-indigo-500">Vault</span></h2>`;
             if (purchases.length === 0) {
-                el.innerHTML += `<div class="text-center py-20 bg-white/5 rounded-[3rem] border border-dashed border-white/10 opacity-50"><p>Vault is empty. Purchase notes to see them here.</p></div>`;
+                el.innerHTML += `<div class="text-center py-20 bg-white/5 rounded-[3rem] border border-dashed border-white/10 opacity-40"><p>No items in your library yet.</p></div>`;
                 return;
             }
             el.innerHTML += `<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 ${PRODUCTS.filter(p => purchases.includes(p.id)).map(p => `
                     <div class="bg-white/5 border border-white/10 p-5 rounded-[2.5rem] flex gap-5">
-                        <img src="${p.image}" class="w-24 h-24 rounded-3xl object-cover">
-                        <div class="flex-1">
-                            <h4 class="font-bold mb-1">${p.name}</h4>
-                            <button class="w-full py-2 mt-4 bg-indigo-600 text-white rounded-xl text-sm font-bold">View PDF</button>
+                        <img src="${p.image}" class="w-20 h-20 rounded-2xl object-cover">
+                        <div class="flex-1 truncate">
+                            <h4 class="font-bold mb-1 truncate">${p.name}</h4>
+                            <button class="w-full py-2 mt-4 bg-indigo-600 text-white rounded-xl text-xs font-bold">Open Vault</button>
                         </div>
                     </div>
                 `).join('')}
@@ -281,44 +307,47 @@
         const renderCart = (el) => {
             el.innerHTML = `<h2 class="text-3xl font-black mb-8">Shopping <span class="text-pink-500">Cart</span></h2>`;
             if (cart.length === 0) {
-                el.innerHTML += `<div class="text-center py-20 bg-white/5 rounded-[3rem] border border-white/10 opacity-50"><p>Your cart is empty.</p></div>`;
+                el.innerHTML += `<div class="text-center py-20 bg-white/5 rounded-[3rem] border border-white/10 opacity-40"><p>Cart is empty.</p></div>`;
                 return;
             }
             const total = cart.reduce((s, i) => s + i.price, 0);
-            el.innerHTML += `<div class="flex flex-col lg:flex-row gap-8">
-                <div class="flex-1 space-y-4">
-                    ${cart.map(item => `
-                        <div class="bg-white/5 border border-white/10 p-4 rounded-3xl flex items-center gap-4">
-                            <img src="${item.image}" class="w-20 h-20 rounded-2xl object-cover">
-                            <div class="flex-1 truncate"><h4 class="font-bold">${item.name}</h4><p class="text-indigo-400 font-bold">${SITE_SETTINGS.currencySymbol}${item.price}</p></div>
-                            <button onclick="removeFromCart('${item.id}')" class="p-2 text-red-400"><i data-lucide="x"></i></button>
-                        </div>
-                    `).join('')}
+            el.innerHTML += `
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <div class="flex-1 space-y-4">
+                        ${cart.map(item => `
+                            <div class="bg-white/5 border border-white/10 p-4 rounded-3xl flex items-center gap-4">
+                                <img src="${item.image}" class="w-16 h-16 rounded-2xl object-cover">
+                                <div class="flex-1 truncate"><h4 class="font-bold text-sm">${item.name}</h4><p class="text-indigo-400 font-bold">${SITE_SETTINGS.currencySymbol}${item.price}</p></div>
+                                <button onclick="removeFromCart('${item.id}')" class="p-2 text-red-400"><i data-lucide="x" size="20"></i></button>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="w-full lg:w-80 bg-white/5 border border-white/10 p-6 rounded-[2.5rem]">
+                        <div class="flex justify-between text-xl font-black mb-6"><span>Total</span><span class="text-indigo-400">${SITE_SETTINGS.currencySymbol}${total}</span></div>
+                        <button onclick="simulateCheckout()" class="w-full py-4 bg-indigo-600 text-white rounded-2xl font-bold">Buy Now</button>
+                    </div>
                 </div>
-                <div class="w-full lg:w-80 bg-white/5 border border-white/10 p-6 rounded-[2.5rem]">
-                    <div class="flex justify-between text-xl font-black mb-6"><span>Total</span><span class="text-indigo-400">${SITE_SETTINGS.currencySymbol}${total}</span></div>
-                    <button onclick="simulateCheckout()" class="w-full py-4 bg-indigo-600 text-white rounded-2xl font-bold">Checkout Now</button>
-                </div>
-            </div>`;
+            `;
         };
 
-        window.setCategoryFilter = (cat) => { filter = cat; render(); };
-
-        window.simulateLogin = async () => {
-            showToast("Logging in anonymously...");
-            await signInAnonymously(auth);
+        window.setFilter = (cat) => { filter = cat; render(); };
+        window.showToast = (msg) => {
+            const t = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            t.classList.remove('hidden');
+            setTimeout(() => t.classList.add('hidden'), 3000);
         };
 
         window.simulateCheckout = () => {
             document.getElementById('modal-container').innerHTML = `
                 <div class="fixed inset-0 z-[70] flex items-center justify-center p-4">
                     <div class="absolute inset-0 bg-black/90 backdrop-blur-xl" onclick="closeModal()"></div>
-                    <div class="relative w-full max-w-md bg-slate-900 border border-white/20 rounded-[3rem] p-8 text-center animate-in slide-in-from-bottom-10">
-                        <h3 class="text-2xl font-black mb-2">Finalize Payment</h3>
-                        <div class="bg-white p-4 rounded-3xl w-48 h-48 mx-auto mb-8 flex items-center justify-center">
+                    <div class="relative w-full max-w-md bg-slate-900 border border-white/20 rounded-[3rem] p-8 text-center">
+                        <h3 class="text-xl font-black mb-6">Payment Gateway</h3>
+                        <div class="bg-white p-6 rounded-3xl w-48 h-48 mx-auto mb-8 flex items-center justify-center">
                            <div class="grid grid-cols-4 gap-1 w-full h-full">${Array.from({length: 16}).map(() => `<div class="rounded-sm ${Math.random() > 0.5 ? 'bg-black' : 'bg-transparent'}"></div>`).join('')}</div>
                         </div>
-                        <button onclick="confirmPayment()" class="w-full py-4 rounded-2xl bg-indigo-600 text-white font-bold">Confirm Pay</button>
+                        <button onclick="confirmPayment()" class="w-full py-4 rounded-2xl bg-indigo-600 text-white font-bold">I Have Paid</button>
                     </div>
                 </div>
             `;
@@ -327,59 +356,23 @@
         window.closeModal = () => document.getElementById('modal-container').innerHTML = '';
 
         window.confirmPayment = async () => {
-            if (!user) return showToast("Please login first", "error");
-            showToast("Processing payment...");
+            showToast("Verifying Payment...");
             for (const item of cart) {
                 const ref = collection(db, 'artifacts', appId, 'users', user.uid, 'purchases');
-                await addDoc(ref, { productId: item.id, purchasedAt: new Date().toISOString() });
+                await addDoc(ref, { productId: item.id, date: new Date().toISOString() });
             }
             cart = [];
             updateCartBadges();
             closeModal();
             switchTab('library');
-            showToast("Purchase successful!", "success");
+            showToast("Materials Unlocked!", "success");
         };
 
-        // Auth Listener
-        onAuthStateChanged(auth, (u) => {
-            user = u;
-            if (u) {
-                document.getElementById('auth-container').innerHTML = `
-                    <div class="flex items-center gap-3 p-3 bg-white/5 rounded-2xl">
-                        <div class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center font-bold">U</div>
-                        <div class="overflow-hidden truncate"><p class="text-sm font-bold">Logged In</p></div>
-                    </div>
-                `;
-                // Fetch purchases
-                const ref = collection(db, 'artifacts', appId, 'users', u.uid, 'purchases');
-                onSnapshot(ref, (snap) => {
-                    purchases = snap.docs.map(doc => doc.data().productId);
-                    render();
-                });
-            }
-            render();
-        });
-        // Search logic
-        window.openSearch = () => { document.getElementById('search-overlay').classList.remove('hidden'); lucide.createIcons(); };
-        window.closeSearch = () => { document.getElementById('search-overlay').classList.add('hidden'); };
-        window.handleSearch = (query) => {
-            const results = PRODUCTS.filter(p => p.name.toLowerCase().includes(query.toLowerCase()));
-            const container = document.getElementById('search-results');
-            container.innerHTML = query ? results.map(p => `
-                <div class="p-4 bg-white/5 border border-white/10 rounded-2xl flex gap-4 cursor-pointer" onclick="closeSearch(); switchTab('home')">
-                    <img src="${p.image}" class="w-12 h-12 rounded-lg object-cover">
-                    <div><h4 class="font-bold text-sm">${p.name}</h4><p class="text-xs opacity-50">${p.category}</p></div>
-                </div>
-            `).join('') : '<p class="text-center opacity-30 mt-10">Type something to search...</p>';
-        };
-
-        // Banner Interval
         setInterval(() => {
             currentBanner = (currentBanner + 1) % BANNERS.length;
             if(activeTab === 'home') render();
         }, 5000);
 
-        // Initial Load
         render();
         lucide.createIcons();
     </script>
