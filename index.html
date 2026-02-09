@@ -12,114 +12,78 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .brand-text { letter-spacing: 0.25em; text-transform: uppercase; font-weight: 900; }
         .animate-bounce-short { animation: bounce 1s infinite; }
         @keyframes bounce { 0%, 100% { transform: translateY(-5%) translateX(-50%); } 50% { transform: translateY(0) translateX(-50%); } }
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(99, 102, 241, 0.3); border-radius: 10px; }
+        .secure-view { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
     </style>
 </head>
 <body class="bg-slate-950 text-white selection:bg-indigo-500/30">
 
-    <!-- ============================================================
-    🛠️ ADMIN CONFIGURATION SECTION (Yahan Edit Karein)
-    ============================================================ -->
-    <script>
-        const SITE_SETTINGS = {
-            brandName: "TEZAS SCIENCE HUB",
-            shortName: "TSH SCIENCE",
-            tagline: "Smart Notes for Smart Minds",
-            currencySymbol: "₹",
-            whatsappNumber: "918229084161", // WhatsApp contact
-            whatsappMessage: "Hello Tezas Science Hub! I need help regarding study materials."
-        };
-
-        const CATEGORIES = ['All', 'Notes', 'Mind Maps', 'PDFs'];
-
-        const BANNERS = [
-            { id: 1, title: "Master Class 10-12 Science", subtitle: "Premium handwritten notes & mind maps", color: "from-indigo-600 to-purple-600" },
-            { id: 2, title: "Ace Your Board Exams", subtitle: "Structured PDF guides for toppers", color: "from-purple-600 to-pink-600" },
-            { id: 3, title: "Visualize Your Success", subtitle: "Colorful Mind Maps for complex topics", color: "from-blue-600 to-indigo-600" }
-        ];
-
-        const PRODUCTS = [
-            { id: 'p1', name: 'Class 10 Physics Master Notes', category: 'Notes', price: 199, image: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80&w=400', description: 'Complete handwritten physics notes covering all chapters of Class 10.' },
-            { id: 'p2', name: 'Organic Chemistry Mind Map', category: 'Mind Maps', price: 99, image: 'https://images.unsplash.com/photo-1532187875302-1df92649edde?auto=format&fit=crop&q=80&w=400', description: 'Visual map of all functional groups for Class 12 Chemistry.' },
-            { id: 'p3', name: 'Class 11 Biology PDF Guide', category: 'PDFs', price: 149, image: 'https://images.unsplash.com/photo-1530026405186-ed1f139313f8?auto=format&fit=crop&q=80&w=400', description: 'Detailed biology diagrams and explanations for board and competitive exams.' },
-            { id: 'p4', name: 'Mathematics Formula Sheet', category: 'PDFs', price: 49, image: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&q=80&w=400', description: 'Quick revision sheet for all formulas from Class 10 to 12.' },
-            { id: 'p5', name: 'Human Brain Handwritten', category: 'Notes', price: 129, image: 'https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&q=80&w=400', description: 'Beautifully illustrated notes on the human nervous system.' },
-            { id: 'p6', name: 'Periodic Table Secrets', category: 'Mind Maps', price: 79, image: 'https://images.unsplash.com/photo-1603126857599-f6e157fa2fe6?auto=format&fit=crop&q=80&w=400', description: 'Interactive mind map to learn trends and properties of elements.' }
-        ];
-    </script>
+    <div id="recaptcha-container"></div>
 
     <!-- App Shell -->
     <div id="app">
-        
-        <!-- Sidebar Overlay (Click outside to close) -->
+        <!-- Sidebar Overlay -->
         <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
 
         <!-- Sidebar -->
         <aside id="sidebar" class="fixed top-0 left-0 h-full w-72 z-50 transition-transform duration-300 -translate-x-full lg:translate-x-0 glass">
             <div class="p-6 h-full flex flex-col">
                 <div class="flex items-center justify-between mb-10">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
-                            <i data-lucide="book-open" class="text-white"></i>
+                    <div class="flex flex-col">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                                <i data-lucide="microscope" class="text-white"></i>
+                            </div>
+                            <h1 class="text-xl font-bold tracking-tight text-white">TSH HUB</h1>
                         </div>
-                        <h1 class="text-xl font-bold tracking-tight">TSH SCIENCE</h1>
+                        <span class="brand-text text-[10px] text-indigo-400 mt-2">TEZAS SCIENCE HUB</span>
                     </div>
-                    <button onclick="toggleSidebar()" class="lg:hidden p-2 hover:bg-white/10 rounded-xl">
-                        <i data-lucide="x"></i>
-                    </button>
+                    <button onclick="toggleSidebar()" class="lg:hidden p-2 hover:bg-white/10 rounded-xl"><i data-lucide="x"></i></button>
                 </div>
                 
                 <nav class="flex-1 space-y-2">
-                    <button onclick="switchTab('home')" id="btn-home" class="w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all bg-indigo-600 text-white shadow-lg">
+                    <button onclick="switchTab('home')" id="btn-home" class="nav-btn w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all bg-indigo-600 text-white shadow-lg">
                         <i data-lucide="home"></i> <span class="font-medium">Explore Hub</span>
                     </button>
-                    <button onclick="switchTab('library')" id="btn-library" class="w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all opacity-70 hover:opacity-100">
-                        <i data-lucide="library"></i> <span class="font-medium">My Library</span>
+                    <button onclick="switchTab('library')" id="btn-library" class="nav-btn w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all opacity-70 hover:opacity-100">
+                        <i data-lucide="library"></i> <span class="font-medium">My Vault</span>
                     </button>
-                    <button onclick="switchTab('cart')" id="btn-cart" class="w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all opacity-70 hover:opacity-100 relative">
+                    <button onclick="switchTab('cart')" id="btn-cart" class="nav-btn w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all opacity-70 hover:opacity-100 relative">
                         <i data-lucide="shopping-cart"></i> <span class="font-medium">My Cart</span>
                         <span id="cart-badge" class="ml-auto bg-pink-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full hidden">0</span>
                     </button>
-                    <!-- WhatsApp Inside Sidebar Only -->
-                    <a id="sidebar-whatsapp" href="#" target="_blank" class="w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all text-emerald-400 hover:bg-emerald-500/10 font-bold border border-emerald-500/20">
+                    
+                    <div id="admin-nav" class="hidden pt-6 mt-6 border-t border-white/10">
+                        <button onclick="switchTab('admin')" class="w-full flex items-center gap-4 px-4 py-3 rounded-2xl bg-amber-500/10 text-amber-500 border border-amber-500/20">
+                            <i data-lucide="shield-check"></i> <span class="font-medium">Admin Panel</span>
+                        </button>
+                    </div>
+
+                    <a id="sidebar-whatsapp" href="#" target="_blank" class="w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all text-emerald-400 hover:bg-emerald-500/10 font-bold border border-emerald-500/20 mt-4">
                         <i data-lucide="phone"></i> <span class="font-medium">WhatsApp Support</span>
                     </a>
                 </nav>
 
-                <!-- Auth UI Section -->
-                <div class="mt-auto pt-6 border-t border-white/10" id="auth-container">
-                    <button onclick="loginWithGoogle()" class="w-full flex items-center gap-4 px-4 py-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold shadow-xl hover:scale-[1.02] transition-all">
-                        <i data-lucide="user"></i> <span>Login with Google</span>
-                    </button>
-                </div>
+                <div class="mt-auto pt-6 border-t border-white/10" id="auth-container"></div>
             </div>
         </aside>
-
         <!-- Main Content -->
         <main class="lg:ml-72 min-h-screen flex flex-col">
             <header class="sticky top-0 z-30 p-4 lg:px-8 flex items-center justify-between backdrop-blur-md border-b border-white/5 bg-slate-950/50">
                 <button onclick="toggleSidebar()" class="lg:hidden p-2 hover:bg-white/5 rounded-xl"><i data-lucide="menu"></i></button>
-                <div class="flex-1 text-center lg:text-left"><h2 class="text-xl md:text-2xl font-black tracking-tight" id="main-brand">TEZAS SCIENCE HUB</h2></div>
-                <button onclick="openSearch()" class="p-3 bg-white/5 border border-white/10 rounded-2xl hover:bg-indigo-600 transition-all"><i data-lucide="search"></i></button>
+                <div class="flex-1 text-center lg:text-left">
+                    <h2 class="brand-text text-xl md:text-2xl font-black text-indigo-400" id="main-brand">TEZAS  SCIENCE  HUB</h2>
+                </div>
+                <button onclick="openSearch()" class="p-3 bg-white/5 border border-white/10 rounded-2xl hover:bg-indigo-600 transition-all shadow-lg"><i data-lucide="search"></i></button>
             </header>
 
-            <div id="page-content" class="flex-1 p-4 lg:p-8 space-y-8 pb-24"></div>
+            <div id="page-content" class="flex-1 p-4 lg:p-8 space-y-8 pb-12"></div>
         </main>
-
-        <!-- Mobile Bottom Nav -->
-        <div class="fixed bottom-4 left-4 right-4 h-16 bg-slate-900/90 border border-white/20 backdrop-blur-xl rounded-2xl flex items-center justify-around lg:hidden z-40 shadow-2xl">
-            <button onclick="switchTab('home')" class="p-2 opacity-100 text-indigo-500"><i data-lucide="home"></i></button>
-            <button onclick="switchTab('library')" class="p-2 opacity-40"><i data-lucide="library"></i></button>
-            <button onclick="switchTab('cart')" class="p-2 opacity-40 relative">
-                <i data-lucide="shopping-cart"></i>
-                <span id="cart-badge-mobile" class="absolute -top-1 -right-1 w-4 h-4 bg-pink-500 text-[10px] flex items-center justify-center rounded-full font-bold hidden">0</span>
-            </button>
-            <button onclick="openSearch()" class="p-2 opacity-40"><i data-lucide="search"></i></button>
-        </div>
     </div>
 
     <!-- Search Overlay -->
@@ -127,7 +91,7 @@
         <div class="max-w-4xl mx-auto w-full">
             <div class="flex items-center gap-4 border-b border-white/10 pb-4">
                 <i data-lucide="search" class="text-indigo-400"></i>
-                <input type="text" id="search-input" placeholder="Search notes, mind maps..." class="bg-transparent text-2xl font-bold w-full outline-none text-white placeholder:text-white/20" oninput="handleSearch(this.value)">
+                <input type="text" id="search-input" placeholder="Search physics, chemistry, biology..." class="bg-transparent text-2xl font-bold w-full outline-none text-white placeholder:text-white/20" oninput="handleSearch(this.value)">
                 <button onclick="closeSearch()" class="p-2 hover:bg-white/10 rounded-xl transition-all"><i data-lucide="x"></i></button>
             </div>
             <div id="search-results" class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[70vh] overflow-y-auto pr-2 custom-scrollbar no-scrollbar">
@@ -136,46 +100,108 @@
         </div>
     </div>
 
-    <!-- Modals & Toasts -->
     <div id="modal-container"></div>
-    <div id="toast" class="hidden fixed bottom-24 left-1/2 -translate-x-1/2 z-[100] px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-3 border bg-indigo-500/90 border-indigo-400 text-white backdrop-blur-md animate-bounce-short">
+    <div id="toast" class="hidden fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-3 border bg-indigo-500/90 border-indigo-400 text-white backdrop-blur-md">
         <i data-lucide="check-circle" id="toast-icon"></i><span id="toast-msg">Success!</span>
     </div>
 
-    <!-- Scripts -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, onSnapshot, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, addDoc, doc, deleteDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyBGMxWchCXI-ow5yHkEnKn4APs39GeB5WM",
-            authDomain: "tezas-science-hub.firebaseapp.com",
-            projectId: "tezas-science-hub",
-            storageBucket: "tezas-science-hub.firebasestorage.app",
-            messagingSenderId: "515937082351",
-            appId: "1:515937082351:web:f99bdab6e1708c9868341a"
+        const SITE_SETTINGS = {
+            brandName: "TEZAS  SCIENCE  HUB",
+            adminEmail: "drtejaskumarmbbs@gmail.com",
+            whatsappNumber: "918229084161",
+            whatsappMessage: "Hello Tezas Science Hub! I need help regarding study materials.",
+            currencySymbol: "₹"
         };
 
+        const CATEGORIES = ['All', 'Class 10', 'Class 11', 'Class 12', 'Notes', 'Mind Maps', 'PDFs'];
+        const BANNERS = [
+            { id: 1, title: "Class 10-12 Science Hub", subtitle: "Download premium handwritten notes for top results.", color: "from-indigo-600 to-indigo-900" },
+            { id: 2, title: "Master Your Concepts", subtitle: "Visual Mind Maps designed for JEE/NEET aspirants.", color: "from-purple-600 to-purple-900" }
+        ];
+
+        // 10 SELECTED PREMIUM PRODUCTS
+        const INITIAL_PRODUCTS = [
+            { id: 'c10p1', name: 'Class 10 Physics: Light Reflection', category: 'Class 10', price: 149, image: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb' },
+            { id: 'c10p2', name: 'Class 10 Chemistry: Chemical Reactions', category: 'Class 10', price: 99, image: 'https://images.unsplash.com/photo-1532187875302-1df92649edde' },
+            { id: 'c11p1', name: 'Class 11 Physics: Kinematics Notes', category: 'Class 11', price: 199, image: 'https://images.unsplash.com/photo-1454165833767-027ffea9e778' },
+            { id: 'c11p2', name: 'Class 11 Chemistry: Mole Concept', category: 'Class 11', price: 129, image: 'https://images.unsplash.com/photo-1576086213369-97a306dca664' },
+            { id: 'c11p3', name: 'Class 11 Biology: Plant Kingdom', category: 'Class 11', price: 159, image: 'https://images.unsplash.com/photo-1530026405186-ed1f139313f8' },
+            { id: 'c12p1', name: 'Class 12 Physics: Electrostatics', category: 'Class 12', price: 249, image: 'https://images.unsplash.com/photo-1518152006812-edab29b069ac' },
+            { id: 'c12p2', name: 'Class 12 Chemistry: Haloalkanes', category: 'Class 12', price: 189, image: 'https://images.unsplash.com/photo-1532187875302-1df92649edde' },
+            { id: 'c12p3', name: 'Class 12 Biology: Genetics Hub', category: 'Class 12', price: 229, image: 'https://images.unsplash.com/photo-1530026405186-ed1f139313f8' },
+            { id: 'sp1', name: 'NEET: 35 Years Biology Pyq', category: 'PDFs', price: 349, image: 'https://images.unsplash.com/photo-1454165833767-027ffea9e778' },
+            { id: 'ex10', name: 'TSH Special: Science Master', category: 'Notes', price: 499, image: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb' }
+        ];
+
+        const firebaseConfig = JSON.parse(__firebase_config);
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
-        const appId = 'tezas-science-hub';
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'tezas-science-hub';
 
         let user = null;
         let activeTab = 'home';
         let cart = [];
         let purchases = [];
         let filter = 'All';
+        let products = [...INITIAL_PRODUCTS];
         let currentBanner = 0;
 
-        // WhatsApp Link Setup (Sidebar Only)
         const waLink = `https://wa.me/${SITE_SETTINGS.whatsappNumber}?text=${encodeURIComponent(SITE_SETTINGS.whatsappMessage)}`;
         document.getElementById('sidebar-whatsapp').href = waLink;
 
-        // --- Search Logic ---
+        onAuthStateChanged(auth, (u) => {
+            user = u;
+            const container = document.getElementById('auth-container');
+            const adminNav = document.getElementById('admin-nav');
+
+            if (u) {
+                container.innerHTML = `
+                    <div class="flex flex-col gap-4">
+                        <div class="flex items-center gap-3 p-3 bg-white/5 rounded-2xl border border-white/10">
+                            <img src="${u.photoURL || 'https://ui-avatars.com/api/?name=User'}" class="w-10 h-10 rounded-full border border-indigo-500/30">
+                            <div class="overflow-hidden truncate">
+                                <p class="text-sm font-bold truncate">${u.displayName || u.phoneNumber || 'Student'}</p>
+                                <p class="text-[10px] opacity-50 truncate">${u.email || 'Phone Login'}</p>
+                            </div>
+                        </div>
+                        <button onclick="handleLogout()" class="w-full flex items-center gap-4 px-4 py-3 rounded-2xl hover:bg-red-500/10 text-red-400 transition-all font-bold">
+                            <i data-lucide="log-out"></i> <span class="font-medium">Logout</span>
+                        </button>
+                    </div>
+                `;
+                if (u.email === SITE_SETTINGS.adminEmail) adminNav.classList.remove('hidden');
+                else adminNav.classList.add('hidden');
+                
+                onSnapshot(collection(db, 'artifacts', appId, 'users', u.uid, 'purchases'), (snap) => {
+                    purchases = snap.docs.map(doc => doc.data().productId);
+                    render();
+                });
+            } else {
+                container.innerHTML = `
+                    <button onclick="showLoginModal()" class="w-full flex items-center gap-4 px-4 py-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold shadow-xl hover:scale-[1.02] transition-all">
+                        <i data-lucide="user"></i> <span>Login to Hub</span>
+                    </button>
+                `;
+                adminNav.classList.add('hidden');
+                purchases = [];
+                render();
+            }
+            lucide.createIcons();
+        });
+
+        onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'products'), (snap) => {
+            const fbProducts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            if(fbProducts.length > 0) products = [...INITIAL_PRODUCTS, ...fbProducts];
+            render();
+        });
+// --- Logic: Search ---
         window.openSearch = () => {
             document.getElementById('search-overlay').classList.remove('hidden');
             document.getElementById('search-input').focus();
@@ -194,48 +220,48 @@
                 container.innerHTML = '';
                 return;
             }
-            const results = PRODUCTS.filter(p => p.name.toLowerCase().includes(query.toLowerCase()));
-            
+            const results = products.filter(p => 
+                p.name.toLowerCase().includes(query.toLowerCase()) || 
+                p.category.toLowerCase().includes(query.toLowerCase())
+            );
+
             if (results.length === 0) {
-                container.innerHTML = `<p class="col-span-full text-center opacity-40 py-10">No materials found for "${query}"</p>`;
+                container.innerHTML = `<p class="col-span-full text-center opacity-40 py-20 font-bold">No results for "${query}"</p>`;
                 return;
             }
 
-            container.innerHTML = results.map(p => `
-                <div onclick="openProductDetail('${p.id}'); closeSearch();" class="p-4 bg-white/5 border border-white/10 rounded-2xl flex gap-4 hover:bg-white/10 cursor-pointer transition-all group">
-                    <img src="${p.image}" class="w-16 h-16 rounded-xl object-cover group-hover:scale-105 transition-transform">
+            container.innerHTML = results.slice(0, 5).map(p => `
+                <div onclick="openProductDetail('${p.id}'); closeSearch();" class="p-4 bg-white/5 border border-white/10 rounded-2xl flex gap-4 hover:bg-white/10 cursor-pointer transition-all group items-center">
+                    <img src="${p.image}" class="w-12 h-12 rounded-xl object-cover">
                     <div class="flex-1 min-w-0">
                         <h4 class="font-bold text-sm truncate">${p.name}</h4>
-                        <p class="text-xs opacity-50">${p.category} • ${SITE_SETTINGS.currencySymbol}${p.price}</p>
+                        <p class="text-[10px] opacity-50">${p.category} • ${SITE_SETTINGS.currencySymbol}${p.price}</p>
                     </div>
-                    <div class="flex items-center text-indigo-400">
-                        <i data-lucide="chevron-right" size="18"></i>
-                    </div>
+                    <i data-lucide="chevron-right" class="text-indigo-400 opacity-0 group-hover:opacity-100 transition-all"></i>
                 </div>
             `).join('');
             lucide.createIcons();
         };
 
-        // --- Product Detail ---
         window.openProductDetail = (id) => {
-            const p = PRODUCTS.find(prod => prod.id === id);
+            const p = products.find(prod => prod.id === id);
             if (!p) return;
             document.getElementById('modal-container').innerHTML = `
                 <div class="fixed inset-0 z-[70] flex items-center justify-center p-4">
                     <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeModal()"></div>
-                    <div class="relative w-full max-w-2xl bg-slate-900 border border-white/10 rounded-[2.5rem] overflow-hidden animate-in zoom-in-95">
+                    <div class="relative w-full max-w-2xl bg-slate-900 border border-white/10 rounded-[3rem] overflow-hidden animate-in zoom-in-95">
                         <button onclick="closeModal()" class="absolute top-6 right-6 p-2 bg-white/5 rounded-full z-10 hover:bg-white/10 transition-colors"><i data-lucide="x" size="20"></i></button>
                         <div class="flex flex-col md:flex-row">
                             <img src="${p.image}" class="w-full md:w-1/2 aspect-square object-cover">
                             <div class="p-8 flex-1 flex flex-col">
                                 <span class="text-[10px] uppercase tracking-widest px-3 py-1 bg-indigo-600/20 text-indigo-400 rounded-full font-black w-fit">${p.category}</span>
                                 <h3 class="text-2xl font-black mt-2 mb-2">${p.name}</h3>
-                                <p class="opacity-60 text-sm leading-relaxed mb-6">${p.description}</p>
+                                <p class="opacity-60 text-sm leading-relaxed mb-6">Expertly curated science notes for top results. Structured as per current board patterns.</p>
                                 <div class="mt-auto pt-6 border-t border-white/10 flex justify-between items-center">
                                     <span class="text-3xl font-black text-indigo-400">${SITE_SETTINGS.currencySymbol}${p.price}</span>
                                     ${purchases.includes(p.id) ? 
-                                        `<button onclick="switchTab('library'); closeModal();" class="px-6 py-3 bg-emerald-600 text-white rounded-2xl font-bold flex items-center gap-2 shadow-lg shadow-emerald-600/20"><i data-lucide="check"></i> Owned</button>` : 
-                                        `<button onclick="addToCart('${p.id}'); closeModal();" class="px-6 py-3 bg-indigo-600 text-white rounded-2xl font-bold hover:bg-indigo-500 transition-all shadow-lg shadow-indigo-600/20">Add to Cart</button>`
+                                        `<button onclick="switchTab('library'); closeModal();" class="px-6 py-3 bg-emerald-600 text-white rounded-2xl font-bold flex items-center gap-2 shadow-lg"><i data-lucide="check"></i> OWNED</button>` : 
+                                        `<button onclick="addToCart('${p.id}'); closeModal();" class="px-6 py-3 bg-indigo-600 text-white rounded-2xl font-bold hover:bg-indigo-500 transition-all shadow-lg">ADD TO CART</button>`
                                     }
                                 </div>
                             </div>
@@ -246,90 +272,68 @@
             lucide.createIcons();
         };
 
-        window.closeModal = () => {
-            document.getElementById('modal-container').innerHTML = '';
-        };
-
-        // --- Auth Logic ---
-        window.loginWithGoogle = async () => {
-            try {
-                await signInWithPopup(auth, provider);
-                showToast("Welcome to Tezas Hub!", "success");
-            } catch (error) {
-                showToast("Login failed", "error");
-            }
-        };
-
-        window.logout = async () => {
-            try {
-                await signOut(auth);
-                cart = [];
-                purchases = [];
-                updateCartBadges();
-                switchTab('home');
-                showToast("Logged out successfully");
-            } catch (error) {
-                showToast("Error logging out", "error");
-            }
-        };
-
-        onAuthStateChanged(auth, (u) => {
-            user = u;
-            const container = document.getElementById('auth-container');
-            if (u) {
-                container.innerHTML = `
-                    <div class="flex flex-col gap-4">
-                        <div class="flex items-center gap-3 p-3 bg-white/5 rounded-2xl border border-white/10">
-                            <img src="${u.photoURL || 'https://ui-avatars.com/api/?name=User'}" class="w-10 h-10 rounded-full border border-indigo-500/30">
-                            <div class="overflow-hidden truncate">
-                                <p class="text-sm font-bold truncate">${u.displayName || 'Student'}</p>
-                                <p class="text-[10px] opacity-50 truncate">${u.email}</p>
+        window.showLoginModal = () => {
+            document.getElementById('modal-container').innerHTML = `
+                <div class="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                    <div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="closeModal()"></div>
+                    <div class="relative w-full max-w-md bg-slate-900 border border-white/10 p-10 rounded-[3rem] text-center animate-in zoom-in-95">
+                        <h3 class="text-2xl font-black mb-2 tracking-tight uppercase">Login Required</h3>
+                        <p class="text-white/40 mb-8 text-sm">Join the Hub to start your journey.</p>
+                        <button onclick="loginWithGoogle()" class="w-full py-4 bg-white text-black font-black rounded-2xl flex items-center justify-center gap-3 mb-4 shadow-xl hover:scale-[1.02] transition-all">
+                            <i data-lucide="log-in"></i> Google Login
+                        </button>
+                        <div class="flex items-center gap-4 my-6 opacity-20"><hr class="flex-1"><span>OR</span><hr class="flex-1"></div>
+                        <div id="phone-auth-section">
+                            <div id="phone-step-1">
+                                <input type="tel" id="phone-number" placeholder="+91 00000 00000" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl text-center mb-4 text-xl font-bold focus:border-indigo-500 outline-none">
+                                <button onclick="sendOTP()" class="w-full py-4 bg-indigo-600 text-white font-bold rounded-2xl">Send OTP</button>
+                            </div>
+                            <div id="phone-step-2" class="hidden">
+                                <input type="text" id="otp-code" placeholder="Enter OTP" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl text-center mb-4 text-xl font-bold focus:border-indigo-500 outline-none">
+                                <button onclick="verifyOTP()" class="w-full py-4 bg-emerald-600 text-white font-bold rounded-2xl">Verify OTP</button>
                             </div>
                         </div>
-                        <button onclick="logout()" class="w-full flex items-center gap-4 px-4 py-3 rounded-2xl hover:bg-red-500/10 text-red-400 transition-all">
-                            <i data-lucide="log-out"></i> <span class="font-medium">Logout</span>
-                        </button>
                     </div>
-                `;
-                const ref = collection(db, 'artifacts', appId, 'users', u.uid, 'purchases');
-                onSnapshot(ref, (snap) => {
-                    purchases = snap.docs.map(doc => doc.data().productId);
-                    render();
-                });
-            } else {
-                container.innerHTML = `
-                    <button onclick="loginWithGoogle()" class="w-full flex items-center gap-4 px-4 py-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold shadow-xl hover:scale-[1.02] transition-all">
-                        <i data-lucide="user"></i> <span>Login with Google</span>
-                    </button>
-                `;
-            }
+                </div>
+            `;
             lucide.createIcons();
-            render();
-        });
-
-        // --- UI Rendering ---
-        window.switchTab = (tab) => {
-            activeTab = tab;
-            render();
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebar-overlay');
-            if(window.innerWidth < 1024) {
-                sidebar.classList.add('-translate-x-full');
-                overlay.classList.add('hidden');
-            }
         };
 
-        window.toggleSidebar = () => {
-            document.getElementById('sidebar').classList.toggle('-translate-x-full');
-            document.getElementById('sidebar-overlay').classList.toggle('hidden');
+        window.loginWithGoogle = async () => {
+            try { await signInWithPopup(auth, provider); closeModal(); } 
+            catch (e) { console.error(e); }
+        };
+
+        window.sendOTP = async () => {
+            const num = document.getElementById('phone-number').value;
+            if (!num.startsWith('+')) return alert("Enter number with country code (e.g. +91)");
+            window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', { 'size': 'invisible' });
+            try {
+                window.confirmationResult = await signInWithPhoneNumber(auth, num, window.recaptchaVerifier);
+                document.getElementById('phone-step-1').classList.add('hidden');
+                document.getElementById('phone-step-2').classList.remove('hidden');
+                showToast("OTP Sent!");
+            } catch (e) { alert(e.message); }
+        };
+
+        window.verifyOTP = async () => {
+            const code = document.getElementById('otp-code').value;
+            try { await window.confirmationResult.confirm(code); closeModal(); showToast("Logged in!"); } 
+            catch (e) { alert("Invalid OTP"); }
+        };
+
+        window.handleLogout = async () => {
+            await signOut(auth);
+            cart = [];
+            showToast("Logged out successfully");
         };
 
         window.addToCart = (id) => {
-            if (!user) return showToast("Please Login First", "error");
-            if (purchases.includes(id)) return showToast("Already in Library", "error");
-            if (cart.find(i => i.id === id)) return showToast("Already in Cart", "error");
-            const product = PRODUCTS.find(p => p.id === id);
-            cart.push(product);
+            if (!user) return showLoginModal();
+            if (purchases.includes(id)) return showToast("Already owned", "info");
+            if (cart.find(i => i.id === id)) return showToast("Already in cart", "info");
+            const p = products.find(x => x.id === id);
+            cart.push(p);
             updateCartBadges();
             showToast("Added to Cart");
         };
@@ -341,54 +345,65 @@
         };
 
         const updateCartBadges = () => {
-            const count = cart.length;
-            ['cart-badge', 'cart-badge-mobile'].forEach(id => {
-                const b = document.getElementById(id);
-                if (b) {
-                    b.innerText = count;
-                    count > 0 ? b.classList.remove('hidden') : b.classList.add('hidden');
-                }
+            const b = document.getElementById('cart-badge');
+            b.innerText = cart.length;
+            cart.length > 0 ? b.classList.remove('hidden') : b.classList.add('hidden');
+        };
+
+        window.switchTab = (tab) => {
+            activeTab = tab;
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-lg');
+                btn.classList.add('opacity-70');
             });
+            const activeBtn = document.getElementById(`btn-${tab}`);
+            if(activeBtn) {
+                activeBtn.classList.add('bg-indigo-600', 'text-white', 'shadow-lg');
+                activeBtn.classList.remove('opacity-70');
+            }
+            render();
+            if (window.innerWidth < 1024) toggleSidebar();
         };
 
         const render = () => {
-            const container = document.getElementById('page-content');
-            if (!container) return;
-            container.innerHTML = '';
-            if (activeTab === 'home') renderHome(container);
-            else if (activeTab === 'library') renderLibrary(container);
-            else if (activeTab === 'cart') renderCart(container);
+            const el = document.getElementById('page-content');
+            if (!el) return;
+            el.innerHTML = '';
+            if (activeTab === 'home') renderHome(el);
+            else if (activeTab === 'library') renderLibrary(el);
+            else if (activeTab === 'cart') renderCart(el);
+            else if (activeTab === 'admin') renderAdmin(el);
             lucide.createIcons();
         };
 
         const renderHome = (el) => {
             const banner = BANNERS[currentBanner];
             el.innerHTML = `
-                <div class="relative h-48 md:h-72 rounded-[2.5rem] overflow-hidden shadow-2xl bg-gradient-to-br ${banner.color} p-8 md:p-16 flex items-center">
-                    <div class="max-w-xl space-y-2">
-                        <span class="inline-block px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-[10px] font-bold uppercase tracking-widest">Premium Materials</span>
-                        <h2 class="text-2xl md:text-5xl font-black leading-tight">${banner.title}</h2>
-                        <p class="text-xs md:text-lg opacity-90">${banner.subtitle}</p>
+                <div class="relative h-60 md:h-80 rounded-[3rem] overflow-hidden shadow-2xl bg-gradient-to-br ${banner.color} p-12 md:p-20 flex items-center transition-all duration-1000">
+                    <div class="max-w-2xl space-y-4">
+                        <span class="inline-block px-4 py-1.5 bg-white/20 backdrop-blur-md rounded-full text-[10px] font-black uppercase tracking-[0.2em]">Premium Series</span>
+                        <h2 class="text-3xl md:text-5xl font-black leading-tight tracking-tight">${banner.title}</h2>
+                        <p class="text-sm md:text-lg opacity-80 font-medium">${banner.subtitle}</p>
                     </div>
                 </div>
-                <div class="flex gap-3 overflow-x-auto pb-2 no-scrollbar">
+                <div class="flex gap-4 overflow-x-auto pb-2 no-scrollbar">
                     ${CATEGORIES.map(cat => `
-                        <button onclick="setFilter('${cat}')" class="whitespace-nowrap px-6 py-2.5 rounded-2xl border transition-all ${filter === cat ? 'bg-indigo-600 border-indigo-500' : 'bg-white/5 border-white/10 hover:bg-white/10'}">${cat}</button>
+                        <button onclick="setFilter('${cat}')" class="whitespace-nowrap px-8 py-3 rounded-2xl border font-bold transition-all ${filter === cat ? 'bg-indigo-600 border-indigo-500' : 'bg-white/5 border-white/10 hover:bg-white/10'}">${cat}</button>
                     `).join('')}
                 </div>
-                <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                    ${PRODUCTS.filter(p => filter === 'All' || p.category === filter).map(p => `
-                        <div onclick="openProductDetail('${p.id}')" class="group bg-white/5 border border-white/10 rounded-[2.5rem] p-4 hover:bg-white/[0.08] transition-all cursor-pointer">
-                            <div class="relative aspect-[4/3] rounded-[2rem] overflow-hidden mb-4">
-                                <img src="${p.image}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                                <div class="absolute top-4 right-4 px-3 py-1 bg-black/40 backdrop-blur-md rounded-full text-[10px] font-bold border border-white/20">${p.category}</div>
+                <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+                    ${products.filter(p => filter === 'All' || p.category === filter).map(p => `
+                        <div onclick="openProductDetail('${p.id}')" class="group bg-white/5 border border-white/10 rounded-[3rem] p-5 hover:bg-white/[0.08] transition-all cursor-pointer">
+                            <div class="relative aspect-[4/3] rounded-[2.5rem] overflow-hidden mb-6">
+                                <img src="${p.image}" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
+                                <div class="absolute top-5 right-5 px-4 py-1.5 bg-black/40 backdrop-blur-md rounded-full text-[10px] font-black border border-white/20 uppercase tracking-widest">${p.category}</div>
                             </div>
-                            <h4 class="font-bold mb-1 truncate">${p.name}</h4>
-                            <div class="flex items-center justify-between">
-                                <span class="text-xl font-black text-indigo-400">${SITE_SETTINGS.currencySymbol}${p.price}</span>
+                            <h4 class="text-lg font-black mb-2 truncate px-2">${p.name}</h4>
+                            <div class="flex items-center justify-between px-2">
+                                <span class="text-2xl font-black text-indigo-400">${SITE_SETTINGS.currencySymbol}${p.price}</span>
                                 ${purchases.includes(p.id) ? 
-                                    `<button class="bg-emerald-500/10 text-emerald-400 px-4 py-2 rounded-xl text-xs font-bold border border-emerald-500/20">Owned</button>` : 
-                                    `<button onclick="event.stopPropagation(); addToCart('${p.id}')" class="bg-indigo-600 hover:bg-indigo-500 p-3 rounded-2xl shadow-lg transition-colors"><i data-lucide="shopping-cart" size="18"></i></button>`
+                                    `<button class="bg-emerald-500/10 text-emerald-400 px-5 py-2.5 rounded-2xl text-[10px] font-black border border-emerald-500/20 uppercase tracking-widest">UNLOCKED</button>` : 
+                                    `<button onclick="event.stopPropagation(); addToCart('${p.id}')" class="bg-indigo-600 hover:bg-indigo-500 p-4 rounded-[1.5rem] shadow-xl transition-all active:scale-95"><i data-lucide="shopping-cart" size="20"></i></button>`
                                 }
                             </div>
                         </div>
@@ -396,20 +411,20 @@
                 </section>
             `;
         };
-
         const renderLibrary = (el) => {
-            el.innerHTML = `<h2 class="text-3xl font-black mb-8">My Study <span class="text-indigo-500">Vault</span></h2>`;
-            if (purchases.length === 0) {
-                el.innerHTML += `<div class="text-center py-20 bg-white/5 rounded-[3rem] border border-dashed border-white/10 opacity-40"><p>You haven't purchased any notes yet.</p></div>`;
+            el.innerHTML = `<h2 class="text-4xl font-black mb-10 tracking-tight">My Study <span class="text-indigo-500">Vault</span></h2>`;
+            const owned = products.filter(p => purchases.includes(p.id));
+            if (owned.length === 0) {
+                el.innerHTML += `<div class="text-center py-32 bg-white/5 rounded-[4rem] border-2 border-dashed border-white/10 opacity-30"><p class="text-xl font-bold">No unlocked materials yet.</p></div>`;
                 return;
             }
-            el.innerHTML += `<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                ${PRODUCTS.filter(p => purchases.includes(p.id)).map(p => `
-                    <div class="bg-white/5 border border-white/10 p-5 rounded-[2.5rem] flex gap-5 hover:bg-white/10 transition-all">
-                        <img src="${p.image}" class="w-20 h-20 rounded-2xl object-cover">
-                        <div class="flex-1 truncate">
-                            <h4 class="font-bold mb-1 truncate text-sm">${p.name}</h4>
-                            <button class="w-full py-2 mt-4 bg-indigo-600 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2"><i data-lucide="eye" size="14"></i> View PDF</button>
+            el.innerHTML += `<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                ${owned.map(p => `
+                    <div class="bg-white/5 border border-white/10 p-6 rounded-[3rem] flex items-center gap-6 hover:bg-white/10 transition-all">
+                        <img src="${p.image}" class="w-24 h-24 rounded-[2.2rem] object-cover shadow-2xl">
+                        <div class="flex-1 min-w-0">
+                            <h4 class="font-black mb-2 truncate text-lg">${p.name}</h4>
+                            <button onclick="openViewer('${p.pdfUrl}')" class="w-full py-3 bg-indigo-600 text-white rounded-2xl text-[10px] font-black flex items-center justify-center gap-3 shadow-lg active:scale-95 uppercase tracking-widest"><i data-lucide="eye" size="14"></i> VIEW FILE</button>
                         </div>
                     </div>
                 `).join('')}
@@ -417,75 +432,151 @@
         };
 
         const renderCart = (el) => {
-            el.innerHTML = `<h2 class="text-3xl font-black mb-8">Shopping <span class="text-pink-500">Cart</span></h2>`;
+            el.innerHTML = `<h2 class="text-4xl font-black mb-10 tracking-tight">Shopping <span class="text-pink-500">Cart</span></h2>`;
             if (cart.length === 0) {
-                el.innerHTML += `<div class="text-center py-20 bg-white/5 rounded-[3rem] border border-white/10 opacity-40"><p>Your cart is empty.</p></div>`;
+                el.innerHTML += `<div class="text-center py-32 bg-white/5 rounded-[4rem] border border-white/10 opacity-40"><p class="text-xl font-bold">Your cart is empty.</p></div>`;
                 return;
             }
             const total = cart.reduce((s, i) => s + i.price, 0);
             el.innerHTML += `
-                <div class="flex flex-col lg:flex-row gap-8">
-                    <div class="flex-1 space-y-4">
+                <div class="flex flex-col lg:flex-row gap-10">
+                    <div class="flex-1 space-y-6">
                         ${cart.map(item => `
-                            <div class="bg-white/5 border border-white/10 p-4 rounded-3xl flex items-center gap-4">
-                                <img src="${item.image}" class="w-16 h-16 rounded-2xl object-cover">
-                                <div class="flex-1 truncate"><h4 class="font-bold text-sm">${item.name}</h4><p class="text-indigo-400 font-bold">${SITE_SETTINGS.currencySymbol}${item.price}</p></div>
-                                <button onclick="removeFromCart('${item.id}')" class="p-2 text-red-400 hover:bg-red-500/10 rounded-xl transition-all"><i data-lucide="x" size="20"></i></button>
+                            <div class="bg-white/5 border border-white/10 p-6 rounded-[2.5rem] flex items-center gap-6">
+                                <img src="${item.image}" class="w-20 h-20 rounded-2xl object-cover">
+                                <div class="flex-1 truncate"><h4 class="font-black text-lg">${item.name}</h4><p class="text-indigo-400 font-black text-xl">${SITE_SETTINGS.currencySymbol}${item.price}</p></div>
+                                <button onclick="removeFromCart('${item.id}')" class="p-3 text-red-400 hover:bg-red-500/10 rounded-2xl transition-all"><i data-lucide="trash-2" size="24"></i></button>
                             </div>
                         `).join('')}
                     </div>
-                    <div class="w-full lg:w-80 bg-white/5 border border-white/10 p-6 rounded-[2.5rem]">
-                        <div class="flex justify-between text-xl font-black mb-6"><span>Total</span><span class="text-indigo-400">${SITE_SETTINGS.currencySymbol}${total}</span></div>
-                        <button onclick="simulateCheckout()" class="w-full py-4 bg-indigo-600 text-white rounded-2xl font-bold shadow-xl shadow-indigo-600/20">Pay Now</button>
+                    <div class="w-full lg:w-96 bg-white/5 border border-white/10 p-8 rounded-[3rem] h-fit sticky top-32">
+                        <div class="flex justify-between text-2xl font-black mb-8"><span>Total</span><span class="text-indigo-400">${SITE_SETTINGS.currencySymbol}${total}</span></div>
+                        <button onclick="handleCheckout()" class="w-full py-5 bg-indigo-600 text-white rounded-[2rem] font-black text-lg shadow-2xl active:scale-95">PROCEED TO PAY</button>
                     </div>
                 </div>
             `;
         };
 
+        const renderAdmin = (el) => {
+            el.innerHTML = `
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-4">
+                    <h2 class="text-4xl font-black">Admin <span class="text-amber-500 tracking-tighter">HQ</span></h2>
+                    <button onclick="showAddModal()" class="px-8 py-4 bg-indigo-600 text-white font-black rounded-2xl shadow-xl flex items-center gap-3"><i data-lucide="plus"></i> NEW PRODUCT</button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    ${products.map(p => `
+                        <div class="bg-white/5 border border-white/10 p-5 rounded-[2.5rem] flex items-center gap-5 group">
+                            <img src="${p.image}" class="w-16 h-16 rounded-2xl object-cover shadow-xl">
+                            <div class="flex-1 min-w-0">
+                                <h4 class="font-black text-sm truncate">${p.name}</h4>
+                                <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest">${p.category} • ${SITE_SETTINGS.currencySymbol}${p.price}</p>
+                            </div>
+                            <button onclick="deleteProduct('${p.id}')" class="p-3 text-red-400 hover:bg-red-500/10 rounded-xl transition-all"><i data-lucide="trash-2" size="18"></i></button>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        };
+
+        window.showAddModal = () => {
+            document.getElementById('modal-container').innerHTML = `
+                <div class="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                    <div class="absolute inset-0 bg-black/95 backdrop-blur-xl" onclick="closeModal()"></div>
+                    <div class="relative w-full max-w-xl bg-slate-900 border border-white/10 p-10 rounded-[4rem]">
+                        <h3 class="text-3xl font-black mb-8 tracking-tighter">Publish New Material</h3>
+                        <div class="space-y-5">
+                            <input type="text" id="p-name" placeholder="Note Title" class="w-full bg-white/5 border border-white/10 p-5 rounded-3xl outline-none focus:border-indigo-500 font-bold">
+                            <div class="grid grid-cols-2 gap-4">
+                                <input type="number" id="p-price" placeholder="Price" class="bg-white/5 border border-white/10 p-5 rounded-3xl outline-none font-bold">
+                                <select id="p-cat" class="bg-white/5 border border-white/10 p-5 rounded-3xl outline-none font-bold text-indigo-400">
+                                    ${CATEGORIES.map(c => `<option class="bg-slate-900">${c}</option>`).join('')}
+                                </select>
+                            </div>
+                            <input type="text" id="p-img" placeholder="Image URL" class="w-full bg-white/5 border border-white/10 p-5 rounded-3xl outline-none">
+                            <button onclick="publishProduct()" id="pub-btn" class="w-full py-5 bg-indigo-600 text-white font-black rounded-3xl text-lg shadow-2xl">PUBLISH TO HUB</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+        };
+
+        window.publishProduct = async () => {
+            const name = document.getElementById('p-name').value;
+            const price = parseInt(document.getElementById('p-price').value);
+            const cat = document.getElementById('p-cat').value;
+            const img = document.getElementById('p-img').value;
+            if (!name || !price) return alert("Fill required fields!");
+            
+            const btn = document.getElementById('pub-btn');
+            btn.innerText = "UPLOADING...";
+            btn.disabled = true;
+
+            await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'products'), {
+                name, price, category: cat, image: img || 'https://images.unsplash.com/photo-1509228468518-180dd4864904', createdAt: new Date().toISOString()
+            });
+            showToast("Material Published!");
+            closeModal();
+        };
+
+        window.deleteProduct = async (id) => {
+            if (confirm("Delete this material?")) {
+                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'products', id));
+                showToast("Product Removed");
+            }
+        };
+
+        window.openViewer = (url) => {
+            document.getElementById('modal-container').innerHTML = `
+                <div class="fixed inset-0 z-[110] bg-slate-950 flex flex-col secure-view" oncontextmenu="return false">
+                    <div class="p-6 flex justify-between items-center border-b border-white/10 bg-slate-900/50 backdrop-blur-xl">
+                        <span class="brand-text text-[10px] text-indigo-400">SECURE PROTECTED VIEW</span>
+                        <button onclick="closeModal()" class="px-6 py-2 bg-red-500/10 text-red-500 rounded-2xl font-black text-xs">EXIT</button>
+                    </div>
+                    <div class="flex-1 bg-slate-900 overflow-hidden relative">
+                        <iframe src="${url || 'https://example.com'}#toolbar=0" class="w-full h-full border-none"></iframe>
+                    </div>
+                </div>
+            `;
+        };
+
+        window.handleCheckout = () => {
+            if (!user) return showLoginModal();
+            confirmPayment();
+        };
+
+        window.confirmPayment = async () => {
+            showToast("Verifying Transaction...");
+            for (const item of cart) {
+                await addDoc(collection(db, 'artifacts', appId, 'users', user.uid, 'purchases'), {
+                    productId: item.id, date: new Date().toISOString()
+                });
+            }
+            cart = [];
+            updateCartBadges();
+            switchTab('library');
+            showToast("Unlocked! Check My Vault", "success");
+        };
+
         window.setFilter = (cat) => { filter = cat; render(); };
-        window.showToast = (msg, type = 'success') => {
+        window.closeModal = () => document.getElementById('modal-container').innerHTML = '';
+        window.toggleSidebar = () => {
+            document.getElementById('sidebar').classList.toggle('-translate-x-full');
+            document.getElementById('sidebar-overlay').classList.toggle('hidden');
+        };
+        window.showToast = (msg) => {
             const t = document.getElementById('toast');
             document.getElementById('toast-msg').innerText = msg;
             t.classList.remove('hidden');
             setTimeout(() => t.classList.add('hidden'), 3000);
         };
 
-        window.simulateCheckout = () => {
-            document.getElementById('modal-container').innerHTML = `
-                <div class="fixed inset-0 z-[70] flex items-center justify-center p-4">
-                    <div class="absolute inset-0 bg-black/90 backdrop-blur-xl" onclick="closeModal()"></div>
-                    <div class="relative w-full max-w-md bg-slate-900 border border-white/20 rounded-[3rem] p-8 text-center animate-in slide-in-from-bottom-10">
-                        <h3 class="text-xl font-black mb-6">Secure Checkout</h3>
-                        <div class="bg-white p-6 rounded-3xl w-48 h-48 mx-auto mb-8 flex items-center justify-center">
-                           <div class="grid grid-cols-4 gap-2 w-full h-full">${Array.from({length: 16}).map(() => `<div class="rounded-sm ${Math.random() > 0.5 ? 'bg-black' : 'bg-transparent'}"></div>`).join('')}</div>
-                        </div>
-                        <button onclick="confirmPayment()" class="w-full py-4 rounded-2xl bg-indigo-600 text-white font-bold hover:bg-indigo-500 transition-all">I Have Paid via UPI</button>
-                    </div>
-                </div>
-            `;
-        };
-
-        window.confirmPayment = async () => {
-            showToast("Verifying Payment...");
-            for (const item of cart) {
-                const ref = collection(db, 'artifacts', appId, 'users', user.uid, 'purchases');
-                await addDoc(ref, { productId: item.id, date: new Date().toISOString() });
-            }
-            cart = [];
-            updateCartBadges();
-            closeModal();
-            switchTab('library');
-            showToast("Access Unlocked!", "success");
-        };
-
         setInterval(() => {
             currentBanner = (currentBanner + 1) % BANNERS.length;
             if(activeTab === 'home') render();
-        }, 5000);
+        }, 6000);
 
         render();
-        lucide.createIcons();
     </script>
 </body>
 </html>
-
