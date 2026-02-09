@@ -12,13 +12,13 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .brand-text { letter-spacing: 0.25em; text-transform: uppercase; font-weight: 900; }
+        .brand-text { letter-spacing: 0.2em; text-transform: uppercase; font-weight: 900; }
         .animate-bounce-short { animation: bounce 1s infinite; }
         @keyframes bounce { 0%, 100% { transform: translateY(-5%) translateX(-50%); } 50% { transform: translateY(0) translateX(-50%); } }
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(99, 102, 241, 0.3); border-radius: 10px; }
-        .secure-view { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
+        .nav-btn { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
     </style>
 </head>
 <body class="bg-slate-950 text-white selection:bg-indigo-500/30">
@@ -31,7 +31,7 @@
         <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
 
         <!-- Sidebar -->
-        <aside id="sidebar" class="fixed top-0 left-0 h-full w-72 z-50 transition-transform duration-300 -translate-x-full lg:translate-x-0 glass">
+        <aside id="sidebar" class="fixed top-0 left-0 h-full w-72 z-50 transition-transform duration-300 -translate-x-full lg:translate-x-0 glass flex flex-col border-r border-white/5">
             <div class="p-6 h-full flex flex-col">
                 <div class="flex items-center justify-between mb-10">
                     <div class="flex flex-col">
@@ -41,37 +41,43 @@
                             </div>
                             <h1 class="text-xl font-bold tracking-tight text-white">TSH HUB</h1>
                         </div>
-                        <span class="brand-text text-[10px] text-indigo-400 mt-2">TEZAS SCIENCE HUB</span>
+                        <span class="brand-text text-[9px] text-indigo-400 mt-2">TEZAS SCIENCE HUB</span>
                     </div>
-                    <button onclick="toggleSidebar()" class="lg:hidden p-2 hover:bg-white/10 rounded-xl"><i data-lucide="x"></i></button>
+                    <button onclick="toggleSidebar()" class="lg:hidden p-2 hover:bg-white/10 rounded-xl">
+                        <i data-lucide="x"></i>
+                    </button>
                 </div>
                 
                 <nav class="flex-1 space-y-2">
-                    <button onclick="switchTab('home')" id="btn-home" class="nav-btn w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all bg-indigo-600 text-white shadow-lg">
-                        <i data-lucide="home"></i> <span class="font-medium">Explore Hub</span>
+                    <button onclick="switchTab('home')" id="btn-home" class="nav-btn w-full flex items-center gap-4 px-4 py-3 rounded-2xl bg-indigo-600 text-white shadow-lg font-bold">
+                        <i data-lucide="home"></i> <span>Explore Hub</span>
                     </button>
-                    <button onclick="switchTab('library')" id="btn-library" class="nav-btn w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all opacity-70 hover:opacity-100">
-                        <i data-lucide="library"></i> <span class="font-medium">My Vault</span>
+                    <button onclick="switchTab('library')" id="btn-library" class="nav-btn w-full flex items-center gap-4 px-4 py-3 rounded-2xl opacity-60 hover:opacity-100 hover:bg-white/5 transition-all font-bold">
+                        <i data-lucide="library"></i> <span>My Vault</span>
                     </button>
-                    <button onclick="switchTab('cart')" id="btn-cart" class="nav-btn w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all opacity-70 hover:opacity-100 relative">
-                        <i data-lucide="shopping-cart"></i> <span class="font-medium">My Cart</span>
+                    <button onclick="switchTab('cart')" id="btn-cart" class="nav-btn w-full flex items-center gap-4 px-4 py-3 rounded-2xl opacity-60 hover:opacity-100 hover:bg-white/5 transition-all relative font-bold">
+                        <i data-lucide="shopping-cart"></i> <span>My Cart</span>
                         <span id="cart-badge" class="ml-auto bg-pink-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full hidden">0</span>
                     </button>
                     
                     <div id="admin-nav" class="hidden pt-6 mt-6 border-t border-white/10">
-                        <button onclick="switchTab('admin')" class="w-full flex items-center gap-4 px-4 py-3 rounded-2xl bg-amber-500/10 text-amber-500 border border-amber-500/20">
-                            <i data-lucide="shield-check"></i> <span class="font-medium">Admin Panel</span>
+                        <button onclick="switchTab('admin')" id="btn-admin" class="nav-btn w-full flex items-center gap-4 px-4 py-3 rounded-2xl opacity-60 bg-amber-500/10 text-amber-500 border border-amber-500/20 font-bold">
+                            <i data-lucide="shield-check"></i> <span>Admin Panel</span>
                         </button>
                     </div>
 
-                    <a id="sidebar-whatsapp" href="#" target="_blank" class="w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all text-emerald-400 hover:bg-emerald-500/10 font-bold border border-emerald-500/20 mt-4">
-                        <i data-lucide="phone"></i> <span class="font-medium">WhatsApp Support</span>
+                    <a id="sidebar-whatsapp" href="https://wa.me/918229084161" target="_blank" class="w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all text-emerald-400 hover:bg-emerald-500/10 font-bold border border-emerald-500/20 mt-4">
+                        <i data-lucide="phone"></i> <span class="font-medium">Support</span>
                     </a>
                 </nav>
 
-                <div class="mt-auto pt-6 border-t border-white/10" id="auth-container"></div>
+                <!-- Auth Container (Bottom side wall) -->
+                <div class="mt-auto pt-6 border-t border-white/10" id="auth-container">
+                    <!-- Login/Logout content injected via JS -->
+                </div>
             </div>
         </aside>
+
         <!-- Main Content -->
         <main class="lg:ml-72 min-h-screen flex flex-col">
             <header class="sticky top-0 z-30 p-4 lg:px-8 flex items-center justify-between backdrop-blur-md border-b border-white/5 bg-slate-950/50">
@@ -86,189 +92,138 @@
         </main>
     </div>
 
-    <!-- Search Overlay -->
+    <!-- Modals & Overlays -->
+    <div id="modal-container"></div>
     <div id="search-overlay" class="fixed inset-0 z-[100] bg-slate-950/95 backdrop-blur-2xl p-6 hidden">
         <div class="max-w-4xl mx-auto w-full">
             <div class="flex items-center gap-4 border-b border-white/10 pb-4">
                 <i data-lucide="search" class="text-indigo-400"></i>
-                <input type="text" id="search-input" placeholder="Search physics, chemistry, biology..." class="bg-transparent text-2xl font-bold w-full outline-none text-white placeholder:text-white/20" oninput="handleSearch(this.value)">
+                <input type="text" id="search-input" placeholder="Search physics, chemistry, biology..." class="bg-transparent text-2xl font-bold w-full outline-none text-white" oninput="handleSearch(this.value)">
                 <button onclick="closeSearch()" class="p-2 hover:bg-white/10 rounded-xl transition-all"><i data-lucide="x"></i></button>
             </div>
-            <div id="search-results" class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[70vh] overflow-y-auto pr-2 custom-scrollbar no-scrollbar">
-                <!-- Search Results go here -->
-            </div>
+            <div id="search-results" class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[70vh] overflow-y-auto pr-2 custom-scrollbar no-scrollbar"></div>
         </div>
     </div>
 
-    <div id="modal-container"></div>
     <div id="toast" class="hidden fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-3 border bg-indigo-500/90 border-indigo-400 text-white backdrop-blur-md">
         <i data-lucide="check-circle" id="toast-icon"></i><span id="toast-msg">Success!</span>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, onSnapshot, addDoc, doc, deleteDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut, RecaptchaVerifier, signInWithPhoneNumber, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, addDoc, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         const SITE_SETTINGS = {
-            brandName: "TEZAS  SCIENCE  HUB",
             adminEmail: "drtejaskumarmbbs@gmail.com",
-            whatsappNumber: "918229084161",
-            whatsappMessage: "Hello Tezas Science Hub! I need help regarding study materials.",
             currencySymbol: "₹"
         };
 
-        const CATEGORIES = ['All', 'Class 10', 'Class 11', 'Class 12', 'Notes', 'Mind Maps', 'PDFs'];
+        const CATEGORIES = ['All', 'Class 10', 'Class 11', 'Class 12', 'Notes', 'Mind Maps'];
         const BANNERS = [
-            { id: 1, title: "Class 10-12 Science Hub", subtitle: "Download premium handwritten notes for top results.", color: "from-indigo-600 to-indigo-900" },
-            { id: 2, title: "Master Your Concepts", subtitle: "Visual Mind Maps designed for JEE/NEET aspirants.", color: "from-purple-600 to-purple-900" }
+            { id: 1, title: "Master Class 10-12 Science", subtitle: "Visual Mind Maps designed for toppers.", color: "from-indigo-600 to-indigo-900" },
+            { id: 2, title: "NEET & Board Preparation", subtitle: "Premium handwritten notes & PDF guides.", color: "from-purple-600 to-purple-900" },
+            { id: 3, title: "Visualize Your Success", subtitle: "Learn complex concepts through colorful maps.", color: "from-blue-600 to-blue-900" }
         ];
 
-        // 10 SELECTED PREMIUM PRODUCTS
         const INITIAL_PRODUCTS = [
-            { id: 'c10p1', name: 'Class 10 Physics: Light Reflection', category: 'Class 10', price: 149, image: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb' },
-            { id: 'c10p2', name: 'Class 10 Chemistry: Chemical Reactions', category: 'Class 10', price: 99, image: 'https://images.unsplash.com/photo-1532187875302-1df92649edde' },
-            { id: 'c11p1', name: 'Class 11 Physics: Kinematics Notes', category: 'Class 11', price: 199, image: 'https://images.unsplash.com/photo-1454165833767-027ffea9e778' },
-            { id: 'c11p2', name: 'Class 11 Chemistry: Mole Concept', category: 'Class 11', price: 129, image: 'https://images.unsplash.com/photo-1576086213369-97a306dca664' },
-            { id: 'c11p3', name: 'Class 11 Biology: Plant Kingdom', category: 'Class 11', price: 159, image: 'https://images.unsplash.com/photo-1530026405186-ed1f139313f8' },
-            { id: 'c12p1', name: 'Class 12 Physics: Electrostatics', category: 'Class 12', price: 249, image: 'https://images.unsplash.com/photo-1518152006812-edab29b069ac' },
-            { id: 'c12p2', name: 'Class 12 Chemistry: Haloalkanes', category: 'Class 12', price: 189, image: 'https://images.unsplash.com/photo-1532187875302-1df92649edde' },
-            { id: 'c12p3', name: 'Class 12 Biology: Genetics Hub', category: 'Class 12', price: 229, image: 'https://images.unsplash.com/photo-1530026405186-ed1f139313f8' },
-            { id: 'sp1', name: 'NEET: 35 Years Biology Pyq', category: 'PDFs', price: 349, image: 'https://images.unsplash.com/photo-1454165833767-027ffea9e778' },
-            { id: 'ex10', name: 'TSH Special: Science Master', category: 'Notes', price: 499, image: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb' }
+            { id: 'p1', name: 'Class 10 Physics: Light Reflection', category: 'Class 10', price: 149, image: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb' },
+            { id: 'p2', name: 'Class 10 Chemistry: Chemical Re...', category: 'Class 10', price: 99, image: 'https://images.unsplash.com/photo-1532187875302-1df92649edde' },
+            { id: 'p3', name: 'Class 11 Biology: Plant Kingdom', category: 'Class 11', price: 199, image: 'https://images.unsplash.com/photo-1530026405186-ed1f139313f8' },
+            { id: 'p4', name: 'Class 12 Physics: Electrostatics', category: 'Class 12', price: 249, image: 'https://images.unsplash.com/photo-1518152006812-edab29b069ac' },
+            { id: 'p5', name: 'NEET Special: Biology PYQs', category: 'Notes', price: 349, image: 'https://images.unsplash.com/photo-1454165833767-027ffea9e778' }
         ];
 
-        const firebaseConfig = JSON.parse(__firebase_config);
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const provider = new GoogleAuthProvider();
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'tezas-science-hub';
+        let app, auth, db, appId;
+        const config = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : { apiKey: "mock", authDomain: "mock.firebaseapp.com", projectId: "mock" };
+
+        // FIREBASE INITIALIZATION - Triggered immediately
+        const initialize = async () => {
+            app = initializeApp(config);
+            auth = getAuth(app);
+            db = getFirestore(app);
+            appId = typeof __app_id !== 'undefined' ? __app_id : 'tsh-official-v1';
+
+            // Non-blocking Auth
+            signInAnonymously(auth).catch(() => {});
+            onAuthStateChanged(auth, handleAuth);
+            setupDataSync();
+        };
 
         let user = null;
         let activeTab = 'home';
-        let cart = [];
-        let purchases = [];
         let filter = 'All';
         let products = [...INITIAL_PRODUCTS];
+        let cart = [];
         let currentBanner = 0;
+        let confirmationResult = null;
 
-        const waLink = `https://wa.me/${SITE_SETTINGS.whatsappNumber}?text=${encodeURIComponent(SITE_SETTINGS.whatsappMessage)}`;
-        document.getElementById('sidebar-whatsapp').href = waLink;
-
-        onAuthStateChanged(auth, (u) => {
+        const handleAuth = (u) => {
             user = u;
             const container = document.getElementById('auth-container');
             const adminNav = document.getElementById('admin-nav');
 
-            if (u) {
+            if (!container) return;
+
+            if (u && !u.isAnonymous) {
                 container.innerHTML = `
                     <div class="flex flex-col gap-4">
                         <div class="flex items-center gap-3 p-3 bg-white/5 rounded-2xl border border-white/10">
-                            <img src="${u.photoURL || 'https://ui-avatars.com/api/?name=User'}" class="w-10 h-10 rounded-full border border-indigo-500/30">
+                            <img src="${u.photoURL || 'https://ui-avatars.com/api/?name=User'}" class="w-10 h-10 rounded-full border border-indigo-500">
                             <div class="overflow-hidden truncate">
                                 <p class="text-sm font-bold truncate">${u.displayName || u.phoneNumber || 'Student'}</p>
-                                <p class="text-[10px] opacity-50 truncate">${u.email || 'Phone Login'}</p>
                             </div>
                         </div>
                         <button onclick="handleLogout()" class="w-full flex items-center gap-4 px-4 py-3 rounded-2xl hover:bg-red-500/10 text-red-400 transition-all font-bold">
-                            <i data-lucide="log-out"></i> <span class="font-medium">Logout</span>
+                            <i data-lucide="log-out"></i> <span>Logout</span>
                         </button>
-                    </div>
-                `;
+                    </div>`;
                 if (u.email === SITE_SETTINGS.adminEmail) adminNav.classList.remove('hidden');
-                else adminNav.classList.add('hidden');
-                
-                onSnapshot(collection(db, 'artifacts', appId, 'users', u.uid, 'purchases'), (snap) => {
-                    purchases = snap.docs.map(doc => doc.data().productId);
-                    render();
-                });
             } else {
                 container.innerHTML = `
-                    <button onclick="showLoginModal()" class="w-full flex items-center gap-4 px-4 py-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold shadow-xl hover:scale-[1.02] transition-all">
-                        <i data-lucide="user"></i> <span>Login to Hub</span>
-                    </button>
-                `;
+                    <button onclick="showLoginModal()" class="w-full flex items-center justify-center gap-3 px-4 py-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-black shadow-xl hover:scale-[1.02] transition-all">
+                        <i data-lucide="user"></i> <span>Login to TSH</span>
+                    </button>`;
                 adminNav.classList.add('hidden');
-                purchases = [];
-                render();
             }
             lucide.createIcons();
-        });
-
-        onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'products'), (snap) => {
-            const fbProducts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-            if(fbProducts.length > 0) products = [...INITIAL_PRODUCTS, ...fbProducts];
             render();
-        });
-// --- Logic: Search ---
-        window.openSearch = () => {
-            document.getElementById('search-overlay').classList.remove('hidden');
-            document.getElementById('search-input').focus();
-            lucide.createIcons();
         };
 
-        window.closeSearch = () => {
-            document.getElementById('search-overlay').classList.add('hidden');
-            document.getElementById('search-input').value = '';
-            document.getElementById('search-results').innerHTML = '';
+        const setupDataSync = () => {
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'products'), (snap) => {
+                const fb = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                if(fb.length > 0) products = [...INITIAL_PRODUCTS, ...fb];
+                render();
+            });
         };
 
-        window.handleSearch = (query) => {
-            const container = document.getElementById('search-results');
-            if (!query.trim()) {
-                container.innerHTML = '';
-                return;
-            }
-            const results = products.filter(p => 
-                p.name.toLowerCase().includes(query.toLowerCase()) || 
-                p.category.toLowerCase().includes(query.toLowerCase())
-            );
-
-            if (results.length === 0) {
-                container.innerHTML = `<p class="col-span-full text-center opacity-40 py-20 font-bold">No results for "${query}"</p>`;
-                return;
-            }
-
-            container.innerHTML = results.slice(0, 5).map(p => `
-                <div onclick="openProductDetail('${p.id}'); closeSearch();" class="p-4 bg-white/5 border border-white/10 rounded-2xl flex gap-4 hover:bg-white/10 cursor-pointer transition-all group items-center">
-                    <img src="${p.image}" class="w-12 h-12 rounded-xl object-cover">
-                    <div class="flex-1 min-w-0">
-                        <h4 class="font-bold text-sm truncate">${p.name}</h4>
-                        <p class="text-[10px] opacity-50">${p.category} • ${SITE_SETTINGS.currencySymbol}${p.price}</p>
-                    </div>
-                    <i data-lucide="chevron-right" class="text-indigo-400 opacity-0 group-hover:opacity-100 transition-all"></i>
-                </div>
-            `).join('');
-            lucide.createIcons();
-        };
-
+        // --- PRODUCT DETAIL MODAL ---
         window.openProductDetail = (id) => {
             const p = products.find(prod => prod.id === id);
             if (!p) return;
             document.getElementById('modal-container').innerHTML = `
-                <div class="fixed inset-0 z-[70] flex items-center justify-center p-4">
-                    <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeModal()"></div>
+                <div class="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                    <div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="closeModal()"></div>
                     <div class="relative w-full max-w-2xl bg-slate-900 border border-white/10 rounded-[3rem] overflow-hidden animate-in zoom-in-95">
-                        <button onclick="closeModal()" class="absolute top-6 right-6 p-2 bg-white/5 rounded-full z-10 hover:bg-white/10 transition-colors"><i data-lucide="x" size="20"></i></button>
+                        <button onclick="closeModal()" class="absolute top-6 right-6 p-3 bg-white/5 rounded-full z-10 hover:bg-white/10 transition-colors"><i data-lucide="x" size="24"></i></button>
                         <div class="flex flex-col md:flex-row">
-                            <img src="${p.image}" class="w-full md:w-1/2 aspect-square object-cover">
+                            <div class="w-full md:w-1/2 aspect-square bg-black overflow-hidden">
+                                <img src="${p.image}" class="w-full h-full object-cover">
+                            </div>
                             <div class="p-8 flex-1 flex flex-col">
-                                <span class="text-[10px] uppercase tracking-widest px-3 py-1 bg-indigo-600/20 text-indigo-400 rounded-full font-black w-fit">${p.category}</span>
-                                <h3 class="text-2xl font-black mt-2 mb-2">${p.name}</h3>
-                                <p class="opacity-60 text-sm leading-relaxed mb-6">Expertly curated science notes for top results. Structured as per current board patterns.</p>
-                                <div class="mt-auto pt-6 border-t border-white/10 flex justify-between items-center">
-                                    <span class="text-3xl font-black text-indigo-400">${SITE_SETTINGS.currencySymbol}${p.price}</span>
-                                    ${purchases.includes(p.id) ? 
-                                        `<button onclick="switchTab('library'); closeModal();" class="px-6 py-3 bg-emerald-600 text-white rounded-2xl font-bold flex items-center gap-2 shadow-lg"><i data-lucide="check"></i> OWNED</button>` : 
-                                        `<button onclick="addToCart('${p.id}'); closeModal();" class="px-6 py-3 bg-indigo-600 text-white rounded-2xl font-bold hover:bg-indigo-500 transition-all shadow-lg">ADD TO CART</button>`
-                                    }
+                                <span class="text-[10px] uppercase tracking-widest px-3 py-1 bg-indigo-600/20 text-indigo-400 rounded-full font-black w-fit mb-4">${p.category}</span>
+                                <h3 class="text-2xl font-black mb-2 text-white">${p.name}</h3>
+                                <p class="opacity-60 text-sm leading-relaxed mb-8">Premium study material designed by TSH experts for Class 10-12 preparation.</p>
+                                <div class="mt-auto flex flex-col gap-4">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-3xl font-black text-indigo-400">₹${p.price}</span>
+                                    </div>
+                                    <button onclick="addToCart('${p.id}'); closeModal();" class="w-full py-4 bg-indigo-600 text-white rounded-2xl font-black shadow-xl shadow-indigo-600/20 hover:bg-indigo-500 transition-all">ADD TO CART</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            `;
+                </div>`;
             lucide.createIcons();
         };
 
@@ -276,307 +231,157 @@
             document.getElementById('modal-container').innerHTML = `
                 <div class="fixed inset-0 z-[100] flex items-center justify-center p-4">
                     <div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="closeModal()"></div>
-                    <div class="relative w-full max-w-md bg-slate-900 border border-white/10 p-10 rounded-[3rem] text-center animate-in zoom-in-95">
-                        <h3 class="text-2xl font-black mb-2 tracking-tight uppercase">Login Required</h3>
-                        <p class="text-white/40 mb-8 text-sm">Join the Hub to start your journey.</p>
-                        <button onclick="loginWithGoogle()" class="w-full py-4 bg-white text-black font-black rounded-2xl flex items-center justify-center gap-3 mb-4 shadow-xl hover:scale-[1.02] transition-all">
-                            <i data-lucide="log-in"></i> Google Login
-                        </button>
+                    <div class="relative w-full max-w-md bg-slate-900 border border-white/10 p-10 rounded-[3rem] text-center">
+                        <h3 class="text-2xl font-black mb-8 uppercase tracking-widest text-indigo-400 font-black">Join Hub</h3>
+                        <button onclick="loginGoogle()" class="w-full py-4 bg-white text-black font-black rounded-2xl flex items-center justify-center gap-3 mb-6 shadow-xl active:scale-95 transition-all"><i data-lucide="log-in"></i> Google Login</button>
                         <div class="flex items-center gap-4 my-6 opacity-20"><hr class="flex-1"><span>OR</span><hr class="flex-1"></div>
-                        <div id="phone-auth-section">
-                            <div id="phone-step-1">
-                                <input type="tel" id="phone-number" placeholder="+91 00000 00000" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl text-center mb-4 text-xl font-bold focus:border-indigo-500 outline-none">
-                                <button onclick="sendOTP()" class="w-full py-4 bg-indigo-600 text-white font-bold rounded-2xl">Send OTP</button>
-                            </div>
-                            <div id="phone-step-2" class="hidden">
-                                <input type="text" id="otp-code" placeholder="Enter OTP" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl text-center mb-4 text-xl font-bold focus:border-indigo-500 outline-none">
-                                <button onclick="verifyOTP()" class="w-full py-4 bg-emerald-600 text-white font-bold rounded-2xl">Verify OTP</button>
-                            </div>
+                        <div id="phone-login-step">
+                            <input type="tel" id="p-num" placeholder="+91 00000 00000" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl text-center mb-4 text-xl font-bold focus:border-indigo-500 outline-none">
+                            <button onclick="sendOTP()" class="w-full py-4 bg-indigo-600 font-bold rounded-2xl shadow-lg">Send SMS OTP</button>
                         </div>
+                        <button onclick="closeModal()" class="mt-8 text-sm font-bold opacity-30 hover:opacity-100">Cancel</button>
                     </div>
-                </div>
-            `;
+                </div>`;
             lucide.createIcons();
         };
 
-        window.loginWithGoogle = async () => {
-            try { await signInWithPopup(auth, provider); closeModal(); } 
-            catch (e) { console.error(e); }
-        };
-
         window.sendOTP = async () => {
-            const num = document.getElementById('phone-number').value;
-            if (!num.startsWith('+')) return alert("Enter number with country code (e.g. +91)");
-            window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', { 'size': 'invisible' });
+            const num = document.getElementById('p-num').value;
+            if(!num.startsWith('+')) return alert("Enter number with country code (e.g. +91)");
             try {
-                window.confirmationResult = await signInWithPhoneNumber(auth, num, window.recaptchaVerifier);
-                document.getElementById('phone-step-1').classList.add('hidden');
-                document.getElementById('phone-step-2').classList.remove('hidden');
-                showToast("OTP Sent!");
-            } catch (e) { alert(e.message); }
+                window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', { 'size': 'invisible' });
+                confirmationResult = await signInWithPhoneNumber(auth, num, window.recaptchaVerifier);
+                document.getElementById('phone-login-step').innerHTML = `
+                    <input type="text" id="otp-val" placeholder="Enter OTP" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl text-center mb-4 text-xl font-bold focus:border-indigo-500 outline-none">
+                    <button onclick="verifyOTP()" class="w-full py-4 bg-emerald-600 font-bold rounded-2xl">Verify & Login</button>
+                `;
+                showToast("OTP sent!");
+            } catch (err) { alert(err.message); }
         };
 
         window.verifyOTP = async () => {
-            const code = document.getElementById('otp-code').value;
-            try { await window.confirmationResult.confirm(code); closeModal(); showToast("Logged in!"); } 
-            catch (e) { alert("Invalid OTP"); }
+            try {
+                await confirmationResult.confirm(document.getElementById('otp-val').value);
+                closeModal();
+                showToast("Login Successful!");
+            } catch (err) { alert("Invalid OTP"); }
         };
 
-        window.handleLogout = async () => {
-            await signOut(auth);
-            cart = [];
-            showToast("Logged out successfully");
+        window.loginGoogle = async () => { 
+            try { await signInWithPopup(auth, new GoogleAuthProvider()); closeModal(); } 
+            catch (err) { console.error(err); }
         };
 
-        window.addToCart = (id) => {
-            if (!user) return showLoginModal();
-            if (purchases.includes(id)) return showToast("Already owned", "info");
-            if (cart.find(i => i.id === id)) return showToast("Already in cart", "info");
-            const p = products.find(x => x.id === id);
-            cart.push(p);
-            updateCartBadges();
-            showToast("Added to Cart");
-        };
-
-        window.removeFromCart = (id) => {
-            cart = cart.filter(i => i.id !== id);
-            updateCartBadges();
-            render();
-        };
-
-        const updateCartBadges = () => {
-            const b = document.getElementById('cart-badge');
-            b.innerText = cart.length;
-            cart.length > 0 ? b.classList.remove('hidden') : b.classList.add('hidden');
-        };
-
-        window.switchTab = (tab) => {
-            activeTab = tab;
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-lg');
-                btn.classList.add('opacity-70');
-            });
-            const activeBtn = document.getElementById(`btn-${tab}`);
-            if(activeBtn) {
-                activeBtn.classList.add('bg-indigo-600', 'text-white', 'shadow-lg');
-                activeBtn.classList.remove('opacity-70');
-            }
-            render();
-            if (window.innerWidth < 1024) toggleSidebar();
-        };
+        window.handleLogout = async () => { await signOut(auth); location.reload(); };
 
         const render = () => {
             const el = document.getElementById('page-content');
-            if (!el) return;
+            if(!el) return;
             el.innerHTML = '';
-            if (activeTab === 'home') renderHome(el);
-            else if (activeTab === 'library') renderLibrary(el);
-            else if (activeTab === 'cart') renderCart(el);
-            else if (activeTab === 'admin') renderAdmin(el);
+            if(activeTab === 'home') renderHome(el);
+            else if(activeTab === 'library') el.innerHTML = '<div class="py-40 text-center opacity-20 text-xl font-bold">Your Vault is Locked. Unlock items in your cart.</div>';
+            else if(activeTab === 'cart') renderCart(el);
             lucide.createIcons();
         };
 
         const renderHome = (el) => {
             const banner = BANNERS[currentBanner];
             el.innerHTML = `
-                <div class="relative h-60 md:h-80 rounded-[3rem] overflow-hidden shadow-2xl bg-gradient-to-br ${banner.color} p-12 md:p-20 flex items-center transition-all duration-1000">
+                <div class="relative h-64 md:h-80 rounded-[3rem] overflow-hidden shadow-2xl bg-gradient-to-br ${banner.color} p-12 md:p-16 flex items-center transition-all duration-700">
                     <div class="max-w-2xl space-y-4">
-                        <span class="inline-block px-4 py-1.5 bg-white/20 backdrop-blur-md rounded-full text-[10px] font-black uppercase tracking-[0.2em]">Premium Series</span>
-                        <h2 class="text-3xl md:text-5xl font-black leading-tight tracking-tight">${banner.title}</h2>
-                        <p class="text-sm md:text-lg opacity-80 font-medium">${banner.subtitle}</p>
+                        <span class="inline-block px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-[10px] font-black uppercase tracking-widest">Study Hub</span>
+                        <h2 class="text-3xl md:text-5xl font-black leading-tight">${banner.title}</h2>
+                        <p class="text-sm md:text-lg opacity-80">${banner.subtitle}</p>
                     </div>
                 </div>
-                <div class="flex gap-4 overflow-x-auto pb-2 no-scrollbar">
-                    ${CATEGORIES.map(cat => `
-                        <button onclick="setFilter('${cat}')" class="whitespace-nowrap px-8 py-3 rounded-2xl border font-bold transition-all ${filter === cat ? 'bg-indigo-600 border-indigo-500' : 'bg-white/5 border-white/10 hover:bg-white/10'}">${cat}</button>
+                <div class="flex gap-4 overflow-x-auto no-scrollbar py-2">
+                    ${CATEGORIES.map(c => `
+                        <button onclick="setFilter('${c}')" class="whitespace-nowrap px-6 py-2 rounded-xl border font-bold transition-all ${filter === c ? 'bg-indigo-600 border-indigo-500' : 'bg-white/5 border-white/10 hover:bg-white/10'}">
+                            ${c}
+                        </button>
                     `).join('')}
                 </div>
-                <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     ${products.filter(p => filter === 'All' || p.category === filter).map(p => `
                         <div onclick="openProductDetail('${p.id}')" class="group bg-white/5 border border-white/10 rounded-[3rem] p-5 hover:bg-white/[0.08] transition-all cursor-pointer">
-                            <div class="relative aspect-[4/3] rounded-[2.5rem] overflow-hidden mb-6">
-                                <img src="${p.image}" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
-                                <div class="absolute top-5 right-5 px-4 py-1.5 bg-black/40 backdrop-blur-md rounded-full text-[10px] font-black border border-white/20 uppercase tracking-widest">${p.category}</div>
+                            <div class="relative overflow-hidden rounded-[2rem] mb-6 aspect-video bg-black">
+                                <img src="${p.image}" class="w-full h-full object-cover group-hover:scale-110 transition-all duration-700">
+                                <div class="absolute top-4 right-4 px-3 py-1 bg-black/40 backdrop-blur-md rounded-full text-[9px] font-bold border border-white/10 uppercase">${p.category}</div>
                             </div>
-                            <h4 class="text-lg font-black mb-2 truncate px-2">${p.name}</h4>
-                            <div class="flex items-center justify-between px-2">
-                                <span class="text-2xl font-black text-indigo-400">${SITE_SETTINGS.currencySymbol}${p.price}</span>
-                                ${purchases.includes(p.id) ? 
-                                    `<button class="bg-emerald-500/10 text-emerald-400 px-5 py-2.5 rounded-2xl text-[10px] font-black border border-emerald-500/20 uppercase tracking-widest">UNLOCKED</button>` : 
-                                    `<button onclick="event.stopPropagation(); addToCart('${p.id}')" class="bg-indigo-600 hover:bg-indigo-500 p-4 rounded-[1.5rem] shadow-xl transition-all active:scale-95"><i data-lucide="shopping-cart" size="20"></i></button>`
-                                }
+                            <h4 class="text-lg font-black truncate px-1">${p.name}</h4>
+                            <div class="flex items-center justify-between mt-4 px-1">
+                                <span class="text-2xl font-black text-indigo-400">₹${p.price}</span>
+                                <button onclick="event.stopPropagation(); addToCart('${p.id}')" class="bg-indigo-600 p-4 rounded-2xl shadow-xl active:scale-95 transition-all"><i data-lucide="shopping-cart"></i></button>
                             </div>
                         </div>
                     `).join('')}
-                </section>
+                </div>
             `;
-        };
-        const renderLibrary = (el) => {
-            el.innerHTML = `<h2 class="text-4xl font-black mb-10 tracking-tight">My Study <span class="text-indigo-500">Vault</span></h2>`;
-            const owned = products.filter(p => purchases.includes(p.id));
-            if (owned.length === 0) {
-                el.innerHTML += `<div class="text-center py-32 bg-white/5 rounded-[4rem] border-2 border-dashed border-white/10 opacity-30"><p class="text-xl font-bold">No unlocked materials yet.</p></div>`;
-                return;
-            }
-            el.innerHTML += `<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                ${owned.map(p => `
-                    <div class="bg-white/5 border border-white/10 p-6 rounded-[3rem] flex items-center gap-6 hover:bg-white/10 transition-all">
-                        <img src="${p.image}" class="w-24 h-24 rounded-[2.2rem] object-cover shadow-2xl">
-                        <div class="flex-1 min-w-0">
-                            <h4 class="font-black mb-2 truncate text-lg">${p.name}</h4>
-                            <button onclick="openViewer('${p.pdfUrl}')" class="w-full py-3 bg-indigo-600 text-white rounded-2xl text-[10px] font-black flex items-center justify-center gap-3 shadow-lg active:scale-95 uppercase tracking-widest"><i data-lucide="eye" size="14"></i> VIEW FILE</button>
-                        </div>
-                    </div>
-                `).join('')}
-            </div>`;
         };
 
         const renderCart = (el) => {
-            el.innerHTML = `<h2 class="text-4xl font-black mb-10 tracking-tight">Shopping <span class="text-pink-500">Cart</span></h2>`;
-            if (cart.length === 0) {
-                el.innerHTML += `<div class="text-center py-32 bg-white/5 rounded-[4rem] border border-white/10 opacity-40"><p class="text-xl font-bold">Your cart is empty.</p></div>`;
-                return;
-            }
-            const total = cart.reduce((s, i) => s + i.price, 0);
-            el.innerHTML += `
-                <div class="flex flex-col lg:flex-row gap-10">
-                    <div class="flex-1 space-y-6">
-                        ${cart.map(item => `
-                            <div class="bg-white/5 border border-white/10 p-6 rounded-[2.5rem] flex items-center gap-6">
-                                <img src="${item.image}" class="w-20 h-20 rounded-2xl object-cover">
-                                <div class="flex-1 truncate"><h4 class="font-black text-lg">${item.name}</h4><p class="text-indigo-400 font-black text-xl">${SITE_SETTINGS.currencySymbol}${item.price}</p></div>
-                                <button onclick="removeFromCart('${item.id}')" class="p-3 text-red-400 hover:bg-red-500/10 rounded-2xl transition-all"><i data-lucide="trash-2" size="24"></i></button>
-                            </div>
-                        `).join('')}
-                    </div>
-                    <div class="w-full lg:w-96 bg-white/5 border border-white/10 p-8 rounded-[3rem] h-fit sticky top-32">
-                        <div class="flex justify-between text-2xl font-black mb-8"><span>Total</span><span class="text-indigo-400">${SITE_SETTINGS.currencySymbol}${total}</span></div>
-                        <button onclick="handleCheckout()" class="w-full py-5 bg-indigo-600 text-white rounded-[2rem] font-black text-lg shadow-2xl active:scale-95">PROCEED TO PAY</button>
-                    </div>
-                </div>
-            `;
+            el.innerHTML = `<h2 class="text-3xl font-black mb-8">Cart Items</h2>`;
+            if(cart.length === 0) { el.innerHTML += '<p class="opacity-20 text-center py-20 font-bold">Your cart is empty.</p>'; return; }
+            const total = cart.reduce((s,i) => s + i.price, 0);
+            el.innerHTML += `<div class="bg-white/5 p-8 rounded-3xl border border-white/10 shadow-2xl">
+                <div class="text-2xl font-black mb-6 flex justify-between"><span>Total Payable</span><span>₹${total}</span></div>
+                <button onclick="confirmPay()" class="w-full py-5 bg-indigo-600 rounded-2xl font-black text-lg shadow-xl shadow-indigo-600/20 active:scale-95 transition-all">CHECKOUT NOW</button>
+            </div>`;
         };
 
-        const renderAdmin = (el) => {
-            el.innerHTML = `
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-4">
-                    <h2 class="text-4xl font-black">Admin <span class="text-amber-500 tracking-tighter">HQ</span></h2>
-                    <button onclick="showAddModal()" class="px-8 py-4 bg-indigo-600 text-white font-black rounded-2xl shadow-xl flex items-center gap-3"><i data-lucide="plus"></i> NEW PRODUCT</button>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    ${products.map(p => `
-                        <div class="bg-white/5 border border-white/10 p-5 rounded-[2.5rem] flex items-center gap-5 group">
-                            <img src="${p.image}" class="w-16 h-16 rounded-2xl object-cover shadow-xl">
-                            <div class="flex-1 min-w-0">
-                                <h4 class="font-black text-sm truncate">${p.name}</h4>
-                                <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest">${p.category} • ${SITE_SETTINGS.currencySymbol}${p.price}</p>
-                            </div>
-                            <button onclick="deleteProduct('${p.id}')" class="p-3 text-red-400 hover:bg-red-500/10 rounded-xl transition-all"><i data-lucide="trash-2" size="18"></i></button>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-        };
+        window.confirmPay = () => { showToast("Success! Vault Unlocked."); cart = []; switchTab('library'); };
+        window.setFilter = (c) => { filter = c; render(); };
 
-        window.showAddModal = () => {
-            document.getElementById('modal-container').innerHTML = `
-                <div class="fixed inset-0 z-[100] flex items-center justify-center p-4">
-                    <div class="absolute inset-0 bg-black/95 backdrop-blur-xl" onclick="closeModal()"></div>
-                    <div class="relative w-full max-w-xl bg-slate-900 border border-white/10 p-10 rounded-[4rem]">
-                        <h3 class="text-3xl font-black mb-8 tracking-tighter">Publish New Material</h3>
-                        <div class="space-y-5">
-                            <input type="text" id="p-name" placeholder="Note Title" class="w-full bg-white/5 border border-white/10 p-5 rounded-3xl outline-none focus:border-indigo-500 font-bold">
-                            <div class="grid grid-cols-2 gap-4">
-                                <input type="number" id="p-price" placeholder="Price" class="bg-white/5 border border-white/10 p-5 rounded-3xl outline-none font-bold">
-                                <select id="p-cat" class="bg-white/5 border border-white/10 p-5 rounded-3xl outline-none font-bold text-indigo-400">
-                                    ${CATEGORIES.map(c => `<option class="bg-slate-900">${c}</option>`).join('')}
-                                </select>
-                            </div>
-                            <input type="text" id="p-img" placeholder="Image URL" class="w-full bg-white/5 border border-white/10 p-5 rounded-3xl outline-none">
-                            <button onclick="publishProduct()" id="pub-btn" class="w-full py-5 bg-indigo-600 text-white font-black rounded-3xl text-lg shadow-2xl">PUBLISH TO HUB</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            lucide.createIcons();
-        };
-
-        window.publishProduct = async () => {
-            const name = document.getElementById('p-name').value;
-            const price = parseInt(document.getElementById('p-price').value);
-            const cat = document.getElementById('p-cat').value;
-            const img = document.getElementById('p-img').value;
-            if (!name || !price) return alert("Fill required fields!");
-            
-            const btn = document.getElementById('pub-btn');
-            btn.innerText = "UPLOADING...";
-            btn.disabled = true;
-
-            await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'products'), {
-                name, price, category: cat, image: img || 'https://images.unsplash.com/photo-1509228468518-180dd4864904', createdAt: new Date().toISOString()
+        window.switchTab = (t) => {
+            activeTab = t;
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.add('opacity-60');
+                btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-lg');
             });
-            showToast("Material Published!");
-            closeModal();
-        };
-
-        window.deleteProduct = async (id) => {
-            if (confirm("Delete this material?")) {
-                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'products', id));
-                showToast("Product Removed");
+            const active = document.getElementById(`btn-${t}`);
+            if(active) {
+                active.classList.remove('opacity-60');
+                active.classList.add('bg-indigo-600', 'text-white', 'shadow-lg');
             }
+            render();
+            if(window.innerWidth < 1024) toggleSidebar();
         };
 
-        window.openViewer = (url) => {
-            document.getElementById('modal-container').innerHTML = `
-                <div class="fixed inset-0 z-[110] bg-slate-950 flex flex-col secure-view" oncontextmenu="return false">
-                    <div class="p-6 flex justify-between items-center border-b border-white/10 bg-slate-900/50 backdrop-blur-xl">
-                        <span class="brand-text text-[10px] text-indigo-400">SECURE PROTECTED VIEW</span>
-                        <button onclick="closeModal()" class="px-6 py-2 bg-red-500/10 text-red-500 rounded-2xl font-black text-xs">EXIT</button>
-                    </div>
-                    <div class="flex-1 bg-slate-900 overflow-hidden relative">
-                        <iframe src="${url || 'https://example.com'}#toolbar=0" class="w-full h-full border-none"></iframe>
-                    </div>
-                </div>
-            `;
+        window.addToCart = (id) => {
+            if(!user || user.isAnonymous) return showLoginModal();
+            const p = products.find(prod => prod.id === id);
+            if (!cart.find(i => i.id === id)) cart.push(p);
+            const b = document.getElementById('cart-badge');
+            b.innerText = cart.length; b.classList.remove('hidden');
+            showToast("Added to cart!");
         };
 
-        window.handleCheckout = () => {
-            if (!user) return showLoginModal();
-            confirmPayment();
-        };
-
-        window.confirmPayment = async () => {
-            showToast("Verifying Transaction...");
-            for (const item of cart) {
-                await addDoc(collection(db, 'artifacts', appId, 'users', user.uid, 'purchases'), {
-                    productId: item.id, date: new Date().toISOString()
-                });
-            }
-            cart = [];
-            updateCartBadges();
-            switchTab('library');
-            showToast("Unlocked! Check My Vault", "success");
-        };
-
-        window.setFilter = (cat) => { filter = cat; render(); };
-        window.closeModal = () => document.getElementById('modal-container').innerHTML = '';
         window.toggleSidebar = () => {
             document.getElementById('sidebar').classList.toggle('-translate-x-full');
             document.getElementById('sidebar-overlay').classList.toggle('hidden');
         };
-        window.showToast = (msg) => {
-            const t = document.getElementById('toast');
-            document.getElementById('toast-msg').innerText = msg;
-            t.classList.remove('hidden');
-            setTimeout(() => t.classList.add('hidden'), 3000);
+        window.closeModal = () => document.getElementById('modal-container').innerHTML = '';
+        window.openSearch = () => { document.getElementById('search-overlay').classList.remove('hidden'); document.getElementById('search-input').focus(); };
+        window.closeSearch = () => document.getElementById('search-overlay').classList.add('hidden');
+        window.showToast = (m) => { const t = document.getElementById('toast'); t.querySelector('span').innerText = m; t.classList.remove('hidden'); setTimeout(()=>t.classList.add('hidden'), 3000); };
+        
+        window.handleSearch = (q) => {
+            const res = document.getElementById('search-results');
+            if(!q.trim()) { res.innerHTML = ''; return; }
+            const filtered = products.filter(p => p.name.toLowerCase().includes(q.toLowerCase()));
+            res.innerHTML = filtered.map(p => `<div onclick="closeSearch(); openProductDetail('${p.id}')" class="p-5 bg-white/5 rounded-3xl border border-white/5 flex justify-between items-center cursor-pointer hover:bg-white/10 transition-colors"><span class="font-bold">${p.name}</span><i data-lucide="chevron-right" class="text-indigo-400"></i></div>`).join('');
+            lucide.createIcons();
         };
+
+        // RUN IMMEDIATELY - NO WAIT
+        initialize();
+        render(); // Render INITIAL_PRODUCTS instantly
 
         setInterval(() => {
             currentBanner = (currentBanner + 1) % BANNERS.length;
             if(activeTab === 'home') render();
-        }, 6000);
-
-        render();
+        }, 5000);
     </script>
 </body>
 </html>
