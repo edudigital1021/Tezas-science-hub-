@@ -1,224 +1,297 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TEZAS SCIENCE HUB (TSH)</title>
+    <!-- CSS and Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+    
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #020617; color: white; overflow-x: hidden; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .brand-text { letter-spacing: 0.2em; text-transform: uppercase; font-weight: 900; }
-        .animate-bounce-short { animation: bounce 1s infinite; }
-        @keyframes bounce { 0%, 100% { transform: translateY(-5%) translateX(-50%); } 50% { transform: translateY(0) translateX(-50%); } }
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(99, 102, 241, 0.3); border-radius: 10px; }
-        .nav-btn { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        .glass { background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(20px); border-right: 1px solid rgba(255, 255, 255, 0.05); }
+        .brand-text { letter-spacing: 0.1em; text-transform: uppercase; font-weight: 800; }
+        
+        /* Banner Styles */
+        .premium-banner { border-radius: 30px; height: 220px; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; transition: all 0.6s ease; padding: 24px; }
+        .pill-tag { background: rgba(255, 255, 255, 0.2); padding: 4px 12px; border-radius: 100px; font-size: 9px; font-weight: 800; text-transform: uppercase; margin-bottom: 12px; display: inline-block; }
+        
+        /* Category Chips */
+        .cat-pill { background: #1e293b; border: 1px solid rgba(255,255,255,0.05); padding: 10px 22px; border-radius: 12px; font-size: 13px; font-weight: 600; transition: all 0.2s; }
+        .cat-pill.active { background: #4f46e5; border-color: #4f46e5; color: white; }
+        
+        /* Product Cards */
+        .p-card { background: #0f172a; border: 1px solid rgba(255,255,255,0.03); border-radius: 24px; padding: 12px; transition: transform 0.3s ease; }
+        .p-img-box { border-radius: 18px; overflow: hidden; position: relative; aspect-ratio: 4/3; background: #000; }
+        
+        /* UI Elements */
+        .p-category-badge { position: absolute; top: 10px; left: 10px; background: rgba(79, 70, 229, 0.95); padding: 3px 10px; border-radius: 8px; font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; z-index: 10; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .p-class-btn { background: #4f46e5; padding: 8px 18px; border-radius: 14px; font-size: 11px; font-weight: 900; text-transform: uppercase; transition: all 0.2s; box-shadow: 0 5px 15px rgba(79, 70, 229, 0.4); border: 1px solid rgba(255,255,255,0.1); color: white; }
+        .p-owned-btn { background: #10b981; border-color: #10b981; box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3); }
+
+        .btn-unlock { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); box-shadow: 0 12px 28px -5px rgba(79, 70, 229, 0.5); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); min-height: 58px; font-size: 14px; letter-spacing: 1.5px; font-weight: 900; }
+        .btn-owned { background: linear-gradient(135deg, #10b981 0%, #059669 100%); min-height: 58px; }
+
+        input, select { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(255,255,255,0.1) !important; color: white !important; }
     </style>
 </head>
-<body class="bg-slate-950 text-white selection:bg-indigo-500/30">
+<body class="selection:bg-indigo-500/30">
 
-    <div id="recaptcha-container"></div>
+    <div id="app" class="flex min-h-screen">
+        <!-- Sidebar Navigation -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
 
-    <!-- App Shell -->
-    <div id="app">
-        <!-- Sidebar Overlay -->
-        <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
-
-        <!-- Sidebar -->
-        <aside id="sidebar" class="fixed top-0 left-0 h-full w-72 z-50 transition-transform duration-300 -translate-x-full lg:translate-x-0 glass flex flex-col border-r border-white/5">
-            <div class="p-6 h-full flex flex-col">
-                <div class="flex items-center justify-between mb-10">
-                    <div class="flex flex-col">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
-                                <i data-lucide="microscope" class="text-white"></i>
-                            </div>
-                            <h1 class="text-xl font-bold tracking-tight text-white">TSH HUB</h1>
+        <aside id="sidebar" class="fixed top-0 left-0 h-full w-72 z-50 transition-transform duration-300 -translate-x-full lg:translate-x-0 glass flex flex-col">
+            <div class="p-8 flex flex-col h-full">
+                <div class="flex flex-col mb-12">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                            <i data-lucide="microscope" class="text-white"></i>
                         </div>
-                        <span class="brand-text text-[9px] text-indigo-400 mt-2">TEZAS SCIENCE HUB</span>
+                        <h1 class="text-xl font-bold tracking-tight text-white uppercase">TSH Hub</h1>
                     </div>
-                    <button onclick="toggleSidebar()" class="lg:hidden p-2 hover:bg-white/10 rounded-xl">
-                        <i data-lucide="x"></i>
-                    </button>
+                    <span class="brand-text text-[9px] text-indigo-400 mt-2 font-bold uppercase tracking-widest">Tezas Science Hub</span>
                 </div>
                 
-                <nav class="flex-1 space-y-2">
-                    <button onclick="switchTab('home')" id="btn-home" class="nav-btn w-full flex items-center gap-4 px-4 py-3 rounded-2xl bg-indigo-600 text-white shadow-lg font-bold">
-                        <i data-lucide="home"></i> <span>Explore Hub</span>
+                <nav class="flex-1 space-y-3">
+                    <button onclick="switchTab('home')" id="btn-home" class="nav-btn w-full flex items-center gap-4 px-5 py-4 rounded-2xl bg-indigo-600 text-white shadow-xl font-bold transition-all">
+                        <i data-lucide="layout-grid"></i> <span>Explore Hub</span>
                     </button>
-                    <button onclick="switchTab('library')" id="btn-library" class="nav-btn w-full flex items-center gap-4 px-4 py-3 rounded-2xl opacity-60 hover:opacity-100 hover:bg-white/5 transition-all font-bold">
-                        <i data-lucide="library"></i> <span>My Vault</span>
-                    </button>
-                    <button onclick="switchTab('cart')" id="btn-cart" class="nav-btn w-full flex items-center gap-4 px-4 py-3 rounded-2xl opacity-60 hover:opacity-100 hover:bg-white/5 transition-all relative font-bold">
-                        <i data-lucide="shopping-cart"></i> <span>My Cart</span>
-                        <span id="cart-badge" class="ml-auto bg-pink-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full hidden">0</span>
+                    <button onclick="switchTab('library')" id="btn-library" class="nav-btn w-full flex items-center gap-4 px-5 py-4 rounded-2xl opacity-50 hover:opacity-100 hover:bg-white/5 font-bold transition-all">
+                        <i data-lucide="book-marked"></i> <span>My Vault</span>
                     </button>
                     
-                    <div id="admin-nav" class="hidden pt-6 mt-6 border-t border-white/10">
+                    <div id="admin-nav" class="hidden pt-6 mt-6 border-t border-white/5">
                         <button onclick="switchTab('admin')" id="btn-admin" class="nav-btn w-full flex items-center gap-4 px-4 py-3 rounded-2xl opacity-60 bg-amber-500/10 text-amber-500 border border-amber-500/20 font-bold">
-                            <i data-lucide="shield-check"></i> <span>Admin Panel</span>
+                            <i data-lucide="shield-check"></i> <span>Developer Panel</span>
                         </button>
                     </div>
 
-                    <a id="sidebar-whatsapp" href="https://wa.me/918229084161" target="_blank" class="w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all text-emerald-400 hover:bg-emerald-500/10 font-bold border border-emerald-500/20 mt-4">
-                        <i data-lucide="phone"></i> <span class="font-medium">Support</span>
+                    <a id="support-link" href="#" target="_blank" class="w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-emerald-400 hover:bg-emerald-500/10 font-bold border border-emerald-500/20 mt-4 transition-all">
+                        <i data-lucide="phone"></i> <span>Direct Support</span>
                     </a>
                 </nav>
 
-                <!-- Auth Container (Bottom side wall) -->
-                <div class="mt-auto pt-6 border-t border-white/10" id="auth-container">
-                    <!-- Login/Logout content injected via JS -->
-                </div>
+                <div class="mt-auto pt-8 border-t border-white/5 min-h-[100px]" id="auth-container"></div>
             </div>
         </aside>
 
-        <!-- Main Content -->
-        <main class="lg:ml-72 min-h-screen flex flex-col">
-            <header class="sticky top-0 z-30 p-4 lg:px-8 flex items-center justify-between backdrop-blur-md border-b border-white/5 bg-slate-950/50">
-                <button onclick="toggleSidebar()" class="lg:hidden p-2 hover:bg-white/5 rounded-xl"><i data-lucide="menu"></i></button>
-                <div class="flex-1 text-center lg:text-left">
-                    <h2 class="brand-text text-xl md:text-2xl font-black text-indigo-400" id="main-brand">TEZAS  SCIENCE  HUB</h2>
-                </div>
-                <button onclick="openSearch()" class="p-3 bg-white/5 border border-white/10 rounded-2xl hover:bg-indigo-600 transition-all shadow-lg"><i data-lucide="search"></i></button>
+        <!-- Main workspace -->
+        <main class="lg:ml-72 flex-1 flex flex-col min-h-screen">
+            <header class="sticky top-0 z-30 px-6 py-5 flex items-center justify-between bg-[#020617]/80 backdrop-blur-xl border-b border-white/5">
+                <button onclick="toggleSidebar()" class="lg:hidden p-2 text-white"><i data-lucide="menu"></i></button>
+                <h2 id="header-title" class="brand-text text-lg text-indigo-400 flex-1 text-center font-black uppercase tracking-widest">TEZAS SCIENCE HUB</h2>
+                <button onclick="openSearch()" class="p-2 text-white hover:bg-indigo-600/20 rounded-xl transition-all"><i data-lucide="search"></i></button>
             </header>
 
-            <div id="page-content" class="flex-1 p-4 lg:p-8 space-y-8 pb-12"></div>
+            <div id="page-content" class="flex-1 px-4 lg:px-12 py-6 space-y-8 max-w-7xl mx-auto w-full"></div>
         </main>
     </div>
 
-    <!-- Modals & Overlays -->
+    <!-- Modals -->
     <div id="modal-container"></div>
-    <div id="search-overlay" class="fixed inset-0 z-[100] bg-slate-950/95 backdrop-blur-2xl p-6 hidden">
-        <div class="max-w-4xl mx-auto w-full">
-            <div class="flex items-center gap-4 border-b border-white/10 pb-4">
-                <i data-lucide="search" class="text-indigo-400"></i>
-                <input type="text" id="search-input" placeholder="Search physics, chemistry, biology..." class="bg-transparent text-2xl font-bold w-full outline-none text-white" oninput="handleSearch(this.value)">
-                <button onclick="closeSearch()" class="p-2 hover:bg-white/10 rounded-xl transition-all"><i data-lucide="x"></i></button>
+    <div id="search-overlay" class="fixed inset-0 z-[100] bg-black/95 backdrop-blur-3xl p-6 hidden">
+        <div class="max-w-3xl mx-auto w-full">
+            <div class="flex items-center gap-6 border-b border-white/10 pb-6">
+                <i data-lucide="search" class="text-indigo-400" size="28"></i>
+                <input type="text" id="search-input" placeholder="Search physics, chemistry..." class="bg-transparent text-2xl font-bold w-full outline-none text-white placeholder:text-white/20" oninput="handleSearch(this.value)">
+                <button onclick="closeSearch()" class="p-2 text-white"><i data-lucide="x"></i></button>
             </div>
-            <div id="search-results" class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[70vh] overflow-y-auto pr-2 custom-scrollbar no-scrollbar"></div>
+            <div id="search-content" class="mt-8 overflow-y-auto max-h-[75vh] custom-scrollbar pr-2">
+                <div id="search-history-container" class="space-y-6"></div>
+                <div id="search-results-list" class="grid grid-cols-1 gap-4 hidden"></div>
+            </div>
         </div>
     </div>
 
-    <div id="toast" class="hidden fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-3 border bg-indigo-500/90 border-indigo-400 text-white backdrop-blur-md">
-        <i data-lucide="check-circle" id="toast-icon"></i><span id="toast-msg">Success!</span>
+    <div id="toast" class="hidden fixed bottom-10 left-1/2 -translate-x-1/2 z-[110] px-8 py-4 rounded-full bg-indigo-600 text-white font-bold shadow-2xl">
+        <span id="toast-msg">Success</span>
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut, RecaptchaVerifier, signInWithPhoneNumber, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, onSnapshot, addDoc, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        const SITE_SETTINGS = {
+        /* =========================================================================
+           HUB CONFIGURATION
+           ========================================================================= */
+        const HUB_CONFIG = {
             adminEmail: "drtejaskumarmbbs@gmail.com",
-            currencySymbol: "₹"
+            supportNumber: "918229084161",
+            headerText: "TEZAS SCIENCE HUB",
+            banners: [
+                { tag: "GITHUB CLOUD", title: "Instant Study Hub", subtitle: "All PDFs powered by GitHub Raw connectivity.", color: "bg-[#4f46e5]" },
+                { tag: "MASTERY", title: "Master Your Concepts", subtitle: "Visual Mind Maps for JEE aspirants.", color: "bg-[#065f46]" },
+                { tag: "BOARD PREP", title: "Premium Exam Notes", subtitle: "Structured handwritten notes for Class 10-12 results.", color: "bg-[#b45309]" }
+            ],
+            categories: ['All', 'Class 10', 'Class 11', 'Class 12', 'Notes', 'Mind Maps', 'PDFs'],
+            resourceTypes: ['Notes', 'Mind Map', 'PDF Guide', 'Handwritten'],
+            classes: ['Class 10', 'Class 11', 'Class 12', 'NEET', 'JEE']
         };
-
-        const CATEGORIES = ['All', 'Class 10', 'Class 11', 'Class 12', 'Notes', 'Mind Maps'];
-        const BANNERS = [
-            { id: 1, title: "Master Class 10-12 Science", subtitle: "Visual Mind Maps designed for toppers.", color: "from-indigo-600 to-indigo-900" },
-            { id: 2, title: "NEET & Board Preparation", subtitle: "Premium handwritten notes & PDF guides.", color: "from-purple-600 to-purple-900" },
-            { id: 3, title: "Visualize Your Success", subtitle: "Learn complex concepts through colorful maps.", color: "from-blue-600 to-blue-900" }
-        ];
-
         const INITIAL_PRODUCTS = [
-            { id: 'p1', name: 'Class 10 Physics: Light Reflection', category: 'Class 10', price: 149, image: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb' },
-            { id: 'p2', name: 'Class 10 Chemistry: Chemical Re...', category: 'Class 10', price: 99, image: 'https://images.unsplash.com/photo-1532187875302-1df92649edde' },
-            { id: 'p3', name: 'Class 11 Biology: Plant Kingdom', category: 'Class 11', price: 199, image: 'https://images.unsplash.com/photo-1530026405186-ed1f139313f8' },
-            { id: 'p4', name: 'Class 12 Physics: Electrostatics', category: 'Class 12', price: 249, image: 'https://images.unsplash.com/photo-1518152006812-edab29b069ac' },
-            { id: 'p5', name: 'NEET Special: Biology PYQs', category: 'Notes', price: 349, image: 'https://images.unsplash.com/photo-1454165833767-027ffea9e778' }
+            { id: 'p1', name: 'Physics Master Notes', category: 'Notes', classLevel: 'CLASS 10', price: 0, image: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400', pdfUrl: '#' },
+            { id: 'p2', name: 'NEET: Biology Human Physiology', category: 'Mind Map', classLevel: 'NEET', price: 0, image: 'https://images.unsplash.com/photo-1530026405186-ed1f139313f8?w=400', pdfUrl: '#' },
+            { id: 'p3', name: 'Mole Concept Formula Sheet', category: 'Handwritten', classLevel: 'CLASS 11', price: 0, image: 'https://images.unsplash.com/photo-1603126010705-34423fe54b57?w=400', pdfUrl: '#' }
         ];
 
-        let app, auth, db, appId;
-        const config = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : { apiKey: "mock", authDomain: "mock.firebaseapp.com", projectId: "mock" };
+        /* =========================================================================
+           CORE SYSTEM (FIREBASE & LOGIC)
+           ========================================================================= */
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, addDoc, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // FIREBASE INITIALIZATION - Triggered immediately
-        const initialize = async () => {
+        let app, auth, db, appId, user = null, activeTab = 'home', filter = 'All', products = [...INITIAL_PRODUCTS], purchases = [], currentBanner = 0;
+        let searchHistory = JSON.parse(localStorage.getItem('tsh_search_history') || '[]');
+        const config = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : { apiKey: "mock" };
+
+        const startSystem = async () => {
+            document.getElementById('header-title').innerText = HUB_CONFIG.headerText;
+            document.getElementById('support-link').href = `https://wa.me/${HUB_CONFIG.supportNumber}`;
+
             app = initializeApp(config);
             auth = getAuth(app);
             db = getFirestore(app);
-            appId = typeof __app_id !== 'undefined' ? __app_id : 'tsh-official-v1';
+            appId = typeof __app_id !== 'undefined' ? __app_id : 'tsh-v5-final';
 
-            // Non-blocking Auth
-            signInAnonymously(auth).catch(() => {});
-            onAuthStateChanged(auth, handleAuth);
+            onAuthStateChanged(auth, (u) => {
+                const container = document.getElementById('auth-container');
+                const adminNav = document.getElementById('admin-nav');
+                
+                if (u && !u.isAnonymous) {
+                    user = u;
+                    container.innerHTML = `<div class="flex flex-col gap-4 animate-in fade-in duration-300"><div class="flex items-center gap-4 p-4 bg-white/5 rounded-2xl border border-white/10 shadow-lg"><img src="${u.photoURL || 'https://ui-avatars.com/api/?name=User'}" class="w-10 h-10 rounded-full border-2 border-indigo-500 shadow-xl"><div class="overflow-hidden"><p class="text-sm font-bold truncate text-white">${u.displayName || 'Hub Member'}</p></div></div><button onclick="handleLogout()" class="w-full flex items-center justify-center gap-3 py-4 rounded-2xl text-red-500 hover:bg-red-400/10 font-bold transition-all border border-transparent hover:border-red-500/20"><i data-lucide="log-out" size="18"></i> <span>Logout</span></button></div>`;
+                    if (u.email === HUB_CONFIG.adminEmail) adminNav.classList.remove('hidden');
+                    loadPurchases(u.uid);
+                } else {
+                    user = null;
+                    container.innerHTML = `<button onclick="showLoginRequiredModal()" class="w-full py-5 bg-white text-black rounded-2xl font-black shadow-2xl flex items-center justify-center gap-3 active:scale-95 transition-all"><i data-lucide="user"></i> <span>Login to TSH</span></button>`;
+                    adminNav.classList.add('hidden');
+                    purchases = [];
+                }
+                lucide.createIcons();
+                render();
+            });
             setupDataSync();
-        };
-
-        let user = null;
-        let activeTab = 'home';
-        let filter = 'All';
-        let products = [...INITIAL_PRODUCTS];
-        let cart = [];
-        let currentBanner = 0;
-        let confirmationResult = null;
-
-        const handleAuth = (u) => {
-            user = u;
-            const container = document.getElementById('auth-container');
-            const adminNav = document.getElementById('admin-nav');
-
-            if (!container) return;
-
-            if (u && !u.isAnonymous) {
-                container.innerHTML = `
-                    <div class="flex flex-col gap-4">
-                        <div class="flex items-center gap-3 p-3 bg-white/5 rounded-2xl border border-white/10">
-                            <img src="${u.photoURL || 'https://ui-avatars.com/api/?name=User'}" class="w-10 h-10 rounded-full border border-indigo-500">
-                            <div class="overflow-hidden truncate">
-                                <p class="text-sm font-bold truncate">${u.displayName || u.phoneNumber || 'Student'}</p>
-                            </div>
-                        </div>
-                        <button onclick="handleLogout()" class="w-full flex items-center gap-4 px-4 py-3 rounded-2xl hover:bg-red-500/10 text-red-400 transition-all font-bold">
-                            <i data-lucide="log-out"></i> <span>Logout</span>
-                        </button>
-                    </div>`;
-                if (u.email === SITE_SETTINGS.adminEmail) adminNav.classList.remove('hidden');
-            } else {
-                container.innerHTML = `
-                    <button onclick="showLoginModal()" class="w-full flex items-center justify-center gap-3 px-4 py-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-black shadow-xl hover:scale-[1.02] transition-all">
-                        <i data-lucide="user"></i> <span>Login to TSH</span>
-                    </button>`;
-                adminNav.classList.add('hidden');
-            }
-            lucide.createIcons();
-            render();
         };
 
         const setupDataSync = () => {
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'products'), (snap) => {
-                const fb = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-                if(fb.length > 0) products = [...INITIAL_PRODUCTS, ...fb];
+                const fbProducts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                products = [...INITIAL_PRODUCTS, ...fbProducts];
                 render();
             });
         };
 
-        // --- PRODUCT DETAIL MODAL ---
+        const loadPurchases = (uid) => {
+            onSnapshot(collection(db, 'artifacts', appId, 'users', uid, 'purchases'), (snap) => {
+                purchases = snap.docs.map(d => d.data().productId);
+                render();
+            });
+        };
+
+        // --- LOGIN UI ---
+        window.showLoginRequiredModal = () => {
+            // ROOT FIX: Using InnerHTML update to replace the current modal content instead of closing the container
+            document.getElementById('modal-container').innerHTML = `
+                <div class="fixed inset-0 z-[200] flex items-center justify-center p-4">
+                    <div class="absolute inset-0 bg-black/95 backdrop-blur-md" onclick="closeModal()"></div>
+                    <div class="relative w-full max-w-sm bg-[#0f172a] border border-white/10 p-10 rounded-[3rem] text-center shadow-2xl animate-in zoom-in-95">
+                        <div class="w-20 h-20 bg-indigo-600 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-lg shadow-indigo-500/20"><i data-lucide="lock" class="text-white" size="32"></i></div>
+                        <h3 class="text-2xl font-black mb-6 tracking-[0.25em] uppercase text-white leading-tight">Login Required</h3>
+                        <p class="text-white/40 text-sm mb-10 leading-relaxed font-medium px-2">Please log in to access premium study materials and save them to your secure vault.</p>
+                        <button onclick="handleLogin()" class="w-full py-5 bg-white text-black font-black rounded-2xl flex items-center justify-center gap-3 shadow-xl hover:scale-[1.02] active:scale-95 transition-all">
+                            <i data-lucide="log-in"></i> Login with Google
+                        </button>
+                        <button onclick="closeModal()" class="mt-8 text-xs font-black uppercase tracking-[0.2em] text-white/20 hover:text-white transition-all">Go Back</button>
+                    </div>
+                </div>`;
+            lucide.createIcons();
+        };
+
+        window.handleLogin = async () => {
+            try { 
+                const provider = new GoogleAuthProvider();
+                await signInWithPopup(auth, provider);
+                closeModal();
+            } catch (err) { console.error("Login Error:", err); }
+        };
+
+        window.handleLogout = async () => {
+            try { await signOut(auth); location.reload(); } catch (err) { console.error(err); }
+        };
+
+        // --- UNLOCK ACTION (Fixed for Modal Transition) ---
+        window.getFreeItem = async (id) => {
+            if (!user) { 
+                showLoginRequiredModal(); // Transition directly to login modal
+                return; 
+            }
+            if (purchases.includes(id)) { closeModal(); switchTab('library'); return; }
+            try {
+                showToast("Unlocking...");
+                await addDoc(collection(db, 'artifacts', appId, 'users', user.uid, 'purchases'), { productId: id, date: new Date().toISOString() });
+                closeModal(); // Close only on successful unlock
+                showToast("Unlocked! Check Vault");
+                switchTab('library');
+            } catch (err) { alert(err.message); }
+        };
+         // --- RENDER HOME ---
+        const renderHome = (el) => {
+            const b = HUB_CONFIG.banners[currentBanner];
+            el.innerHTML = `
+                <div class="premium-banner ${b.color} transition-all duration-700 shadow-2xl">
+                    <div class="relative z-10 w-full flex flex-col items-center">
+                        <span class="pill-tag">${b.tag}</span>
+                        <h2 class="text-3xl md:text-5xl font-black text-white leading-tight mb-4 uppercase tracking-tighter">${b.title}</h2>
+                        <p class="text-[11px] md:text-sm opacity-90 text-white font-medium max-w-lg">${b.subtitle}</p>
+                    </div>
+                    <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-white/10 rounded-full blur-3xl opacity-30"></div>
+                </div>
+                <div class="flex gap-3 overflow-x-auto no-scrollbar py-2">
+                    ${HUB_CONFIG.categories.map(c => `<button onclick="setFilter('${c}')" class="cat-pill whitespace-nowrap ${filter === c ? 'active' : ''}">${c}</button>`).join('')}
+                </div>
+                <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
+                    ${products.filter(p => filter === 'All' || p.category === filter || (p.classLevel && p.classLevel.toUpperCase() === filter.toUpperCase())).map(p => `
+                        <div onclick="openProductDetail('${p.id}')" class="p-card group cursor-pointer hover:border-indigo-500/20 transition-all shadow-xl">
+                            <div class="p-img-box mb-4">
+                                <span class="p-category-badge">${p.category || 'Science'}</span>
+                                <img src="${p.image}" class="w-full h-full object-cover opacity-90 transition-all group-hover:scale-105 duration-700">
+                            </div>
+                            <h4 class="text-[12px] md:text-[15px] font-bold truncate text-white mb-4 leading-tight">${p.name}</h4>
+                            <div class="flex items-center justify-between px-1">
+                                <span class="text-xs font-black text-emerald-400 uppercase tracking-widest bg-emerald-400/10 px-3 py-1 rounded-full">FREE</span>
+                                <button onclick="event.stopPropagation(); openProductDetail('${p.id}')" class="p-class-btn text-white ${purchases.includes(p.id) ? 'p-owned-btn' : ''}">
+                                    ${purchases.includes(p.id) ? 'OWNED' : (p.classLevel || 'NOTES')}
+                                </button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>`;
+        };
+
+        // --- PRODUCT DETAIL MODAL (No immediate close on unlock trigger) ---
         window.openProductDetail = (id) => {
-            const p = products.find(prod => prod.id === id);
-            if (!p) return;
+            const p = products.find(prod => prod.id === id); if (!p) return;
+            const isOwned = purchases.includes(p.id);
             document.getElementById('modal-container').innerHTML = `
                 <div class="fixed inset-0 z-[100] flex items-center justify-center p-4">
                     <div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="closeModal()"></div>
-                    <div class="relative w-full max-w-2xl bg-slate-900 border border-white/10 rounded-[3rem] overflow-hidden animate-in zoom-in-95">
-                        <button onclick="closeModal()" class="absolute top-6 right-6 p-3 bg-white/5 rounded-full z-10 hover:bg-white/10 transition-colors"><i data-lucide="x" size="24"></i></button>
+                    <div class="relative w-full max-w-2xl bg-[#0f172a] border border-white/10 rounded-[2.5rem] overflow-hidden animate-in zoom-in-95 duration-300 shadow-2xl">
+                        <button onclick="closeModal()" class="absolute top-6 right-6 p-2 bg-white/10 rounded-full text-white z-20 hover:bg-white/20 transition-all"><i data-lucide="x" size="20"></i></button>
                         <div class="flex flex-col md:flex-row">
-                            <div class="w-full md:w-1/2 aspect-square bg-black overflow-hidden">
-                                <img src="${p.image}" class="w-full h-full object-cover">
-                            </div>
-                            <div class="p-8 flex-1 flex flex-col">
-                                <span class="text-[10px] uppercase tracking-widest px-3 py-1 bg-indigo-600/20 text-indigo-400 rounded-full font-black w-fit mb-4">${p.category}</span>
-                                <h3 class="text-2xl font-black mb-2 text-white">${p.name}</h3>
-                                <p class="opacity-60 text-sm leading-relaxed mb-8">Premium study material designed by TSH experts for Class 10-12 preparation.</p>
-                                <div class="mt-auto flex flex-col gap-4">
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-3xl font-black text-indigo-400">₹${p.price}</span>
-                                    </div>
-                                    <button onclick="addToCart('${p.id}'); closeModal();" class="w-full py-4 bg-indigo-600 text-white rounded-2xl font-black shadow-xl shadow-indigo-600/20 hover:bg-indigo-500 transition-all">ADD TO CART</button>
+                            <div class="w-full md:w-1/2 aspect-square bg-black overflow-hidden group"><img src="${p.image}" class="w-full h-full object-cover group-hover:scale-110 transition-all duration-1000"></div>
+                            <div class="p-8 md:p-10 flex-1 flex flex-col justify-center bg-gradient-to-br from-slate-900 to-black">
+                                <span class="pill-tag bg-indigo-600/20 text-indigo-400 w-fit mb-4 font-black tracking-widest uppercase">${p.category}</span>
+                                <h3 class="text-2xl md:text-3xl font-black mb-4 text-white leading-tight uppercase tracking-tighter">${p.name}</h3>
+                                <p class="opacity-60 text-[13px] md:text-sm mb-10 leading-relaxed font-medium">Premium TSH Hub material. Access exclusive content for academic excellence.</p>
+                                <div class="mt-auto flex items-center justify-between gap-6">
+                                    <span class="text-4xl font-black text-emerald-400 animate-pulse uppercase">FREE</span>
+                                    <button onclick="${isOwned ? "switchTab('library'); closeModal()" : `getFreeItem('${p.id}')`}" 
+                                        class="flex-1 py-5 ${isOwned ? 'btn-owned' : 'btn-unlock'} text-white rounded-3xl font-black text-sm uppercase tracking-[2px]">
+                                        ${isOwned ? 'VIEW IN VAULT' : 'GET FOR FREE'}
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -227,161 +300,61 @@
             lucide.createIcons();
         };
 
-        window.showLoginModal = () => {
-            document.getElementById('modal-container').innerHTML = `
-                <div class="fixed inset-0 z-[100] flex items-center justify-center p-4">
-                    <div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="closeModal()"></div>
-                    <div class="relative w-full max-w-md bg-slate-900 border border-white/10 p-10 rounded-[3rem] text-center">
-                        <h3 class="text-2xl font-black mb-8 uppercase tracking-widest text-indigo-400 font-black">Join Hub</h3>
-                        <button onclick="loginGoogle()" class="w-full py-4 bg-white text-black font-black rounded-2xl flex items-center justify-center gap-3 mb-6 shadow-xl active:scale-95 transition-all"><i data-lucide="log-in"></i> Google Login</button>
-                        <div class="flex items-center gap-4 my-6 opacity-20"><hr class="flex-1"><span>OR</span><hr class="flex-1"></div>
-                        <div id="phone-login-step">
-                            <input type="tel" id="p-num" placeholder="+91 00000 00000" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl text-center mb-4 text-xl font-bold focus:border-indigo-500 outline-none">
-                            <button onclick="sendOTP()" class="w-full py-4 bg-indigo-600 font-bold rounded-2xl shadow-lg">Send SMS OTP</button>
-                        </div>
-                        <button onclick="closeModal()" class="mt-8 text-sm font-bold opacity-30 hover:opacity-100">Cancel</button>
-                    </div>
-                </div>`;
-            lucide.createIcons();
-        };
-
-        window.sendOTP = async () => {
-            const num = document.getElementById('p-num').value;
-            if(!num.startsWith('+')) return alert("Enter number with country code (e.g. +91)");
-            try {
-                window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', { 'size': 'invisible' });
-                confirmationResult = await signInWithPhoneNumber(auth, num, window.recaptchaVerifier);
-                document.getElementById('phone-login-step').innerHTML = `
-                    <input type="text" id="otp-val" placeholder="Enter OTP" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl text-center mb-4 text-xl font-bold focus:border-indigo-500 outline-none">
-                    <button onclick="verifyOTP()" class="w-full py-4 bg-emerald-600 font-bold rounded-2xl">Verify & Login</button>
-                `;
-                showToast("OTP sent!");
-            } catch (err) { alert(err.message); }
-        };
-
-        window.verifyOTP = async () => {
-            try {
-                await confirmationResult.confirm(document.getElementById('otp-val').value);
-                closeModal();
-                showToast("Login Successful!");
-            } catch (err) { alert("Invalid OTP"); }
-        };
-
-        window.loginGoogle = async () => { 
-            try { await signInWithPopup(auth, new GoogleAuthProvider()); closeModal(); } 
-            catch (err) { console.error(err); }
-        };
-
-        window.handleLogout = async () => { await signOut(auth); location.reload(); };
-
+        // Utility UI
         const render = () => {
-            const el = document.getElementById('page-content');
-            if(!el) return;
-            el.innerHTML = '';
+            const el = document.getElementById('page-content'); if(!el) return; el.innerHTML = '';
             if(activeTab === 'home') renderHome(el);
-            else if(activeTab === 'library') el.innerHTML = '<div class="py-40 text-center opacity-20 text-xl font-bold">Your Vault is Locked. Unlock items in your cart.</div>';
-            else if(activeTab === 'cart') renderCart(el);
+            else if(activeTab === 'library') renderLibrary(el);
+            else if(activeTab === 'admin') renderAdmin(el);
             lucide.createIcons();
         };
 
-        const renderHome = (el) => {
-            const banner = BANNERS[currentBanner];
-            el.innerHTML = `
-                <div class="relative h-64 md:h-80 rounded-[3rem] overflow-hidden shadow-2xl bg-gradient-to-br ${banner.color} p-12 md:p-16 flex items-center transition-all duration-700">
-                    <div class="max-w-2xl space-y-4">
-                        <span class="inline-block px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-[10px] font-black uppercase tracking-widest">Study Hub</span>
-                        <h2 class="text-3xl md:text-5xl font-black leading-tight">${banner.title}</h2>
-                        <p class="text-sm md:text-lg opacity-80">${banner.subtitle}</p>
-                    </div>
-                </div>
-                <div class="flex gap-4 overflow-x-auto no-scrollbar py-2">
-                    ${CATEGORIES.map(c => `
-                        <button onclick="setFilter('${c}')" class="whitespace-nowrap px-6 py-2 rounded-xl border font-bold transition-all ${filter === c ? 'bg-indigo-600 border-indigo-500' : 'bg-white/5 border-white/10 hover:bg-white/10'}">
-                            ${c}
-                        </button>
-                    `).join('')}
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                    ${products.filter(p => filter === 'All' || p.category === filter).map(p => `
-                        <div onclick="openProductDetail('${p.id}')" class="group bg-white/5 border border-white/10 rounded-[3rem] p-5 hover:bg-white/[0.08] transition-all cursor-pointer">
-                            <div class="relative overflow-hidden rounded-[2rem] mb-6 aspect-video bg-black">
-                                <img src="${p.image}" class="w-full h-full object-cover group-hover:scale-110 transition-all duration-700">
-                                <div class="absolute top-4 right-4 px-3 py-1 bg-black/40 backdrop-blur-md rounded-full text-[9px] font-bold border border-white/10 uppercase">${p.category}</div>
-                            </div>
-                            <h4 class="text-lg font-black truncate px-1">${p.name}</h4>
-                            <div class="flex items-center justify-between mt-4 px-1">
-                                <span class="text-2xl font-black text-indigo-400">₹${p.price}</span>
-                                <button onclick="event.stopPropagation(); addToCart('${p.id}')" class="bg-indigo-600 p-4 rounded-2xl shadow-xl active:scale-95 transition-all"><i data-lucide="shopping-cart"></i></button>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
+        const renderLibrary = (el) => {
+            el.innerHTML = `<h2 class="text-3xl font-black mb-8 text-indigo-400 uppercase tracking-tighter">My Secure Vault</h2>`;
+            const myItems = products.filter(p => purchases.includes(p.id));
+            if (myItems.length === 0) el.innerHTML += `<p class="py-40 text-center opacity-30 font-black text-xl uppercase tracking-widest">Vault is empty.</p>`;
+            else el.innerHTML += `<div class="grid grid-cols-1 md:grid-cols-2 gap-4">${myItems.map(p => `<div class="bg-white/5 border border-white/10 p-6 rounded-3xl flex items-center justify-between shadow-xl"><div><h4 class="font-bold text-white text-sm md:text-base truncate w-40 md:w-auto uppercase tracking-wide font-black">${p.name}</h4><p class="text-[9px] opacity-40 uppercase tracking-widest mt-1 font-black">${p.category} • ${p.classLevel}</p></div><a href="${p.pdfUrl}" target="_blank" class="px-6 py-3 bg-indigo-600 rounded-xl font-black text-[10px] shadow-lg hover:bg-indigo-500 active:scale-95 transition-all uppercase tracking-widest">View PDF</a></div>`).join('')}</div>`;
         };
 
-        const renderCart = (el) => {
-            el.innerHTML = `<h2 class="text-3xl font-black mb-8">Cart Items</h2>`;
-            if(cart.length === 0) { el.innerHTML += '<p class="opacity-20 text-center py-20 font-bold">Your cart is empty.</p>'; return; }
-            const total = cart.reduce((s,i) => s + i.price, 0);
-            el.innerHTML += `<div class="bg-white/5 p-8 rounded-3xl border border-white/10 shadow-2xl">
-                <div class="text-2xl font-black mb-6 flex justify-between"><span>Total Payable</span><span>₹${total}</span></div>
-                <button onclick="confirmPay()" class="w-full py-5 bg-indigo-600 rounded-2xl font-black text-lg shadow-xl shadow-indigo-600/20 active:scale-95 transition-all">CHECKOUT NOW</button>
-            </div>`;
+        const renderAdmin = (el) => {
+            if (!user || user.email !== HUB_CONFIG.adminEmail) return switchTab('home');
+            el.innerHTML = `<div class="max-w-2xl mx-auto space-y-8 animate-in fade-in"><form onsubmit="handleProductUpload(event)" class="bg-white/5 border border-white/10 p-8 rounded-[2.5rem] space-y-6 shadow-2xl"><h2 class="text-2xl font-black text-indigo-400 uppercase tracking-widest text-center">Developer Dash</h2><div class="space-y-4"><input name="name" type="text" placeholder="Material Title" class="w-full px-6 py-4 rounded-2xl" required><div class="grid grid-cols-2 gap-4"><select name="classLevel" class="w-full px-6 py-4 rounded-2xl">${HUB_CONFIG.classes.map(c => `<option value="${c.toUpperCase()}">${c}</option>`).join('')}</select><select name="category" class="w-full px-6 py-4 rounded-2xl">${HUB_CONFIG.resourceTypes.map(c => `<option value="${c}">${c}</option>`).join('')}</select></div><input name="image" type="url" placeholder="GitHub Image URL" class="w-full px-6 py-4 rounded-2xl" required><input name="pdfUrl" type="url" placeholder="GitHub PDF URL" class="w-full px-6 py-4 rounded-2xl" required></div><button type="submit" class="w-full py-5 bg-indigo-600 rounded-3xl font-black uppercase tracking-widest shadow-xl">Publish Material</button></form></div>`;
+            lucide.createIcons();
         };
 
-        window.confirmPay = () => { showToast("Success! Vault Unlocked."); cart = []; switchTab('library'); };
-        window.setFilter = (c) => { filter = c; render(); };
-
-        window.switchTab = (t) => {
-            activeTab = t;
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.add('opacity-60');
-                btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-lg');
-            });
-            const active = document.getElementById(`btn-${t}`);
-            if(active) {
-                active.classList.remove('opacity-60');
-                active.classList.add('bg-indigo-600', 'text-white', 'shadow-lg');
-            }
-            render();
-            if(window.innerWidth < 1024) toggleSidebar();
+        const handleProductUpload = async (e) => {
+            e.preventDefault(); const btn = e.target.querySelector('button'); const formData = new FormData(e.target);
+            const data = { name: formData.get('name'), classLevel: formData.get('classLevel'), category: formData.get('category'), image: formData.get('image'), pdfUrl: formData.get('pdfUrl'), price: 0, createdAt: new Date().toISOString() };
+            btn.disabled = true; btn.innerText = "Publishing...";
+            try { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'products'), data); showToast("Live!"); e.target.reset(); } 
+            catch (err) { alert(err.message); } finally { btn.disabled = false; btn.innerText = "Publish Material"; }
         };
 
-        window.addToCart = (id) => {
-            if(!user || user.isAnonymous) return showLoginModal();
-            const p = products.find(prod => prod.id === id);
-            if (!cart.find(i => i.id === id)) cart.push(p);
-            const b = document.getElementById('cart-badge');
-            b.innerText = cart.length; b.classList.remove('hidden');
-            showToast("Added to cart!");
-        };
-
-        window.toggleSidebar = () => {
-            document.getElementById('sidebar').classList.toggle('-translate-x-full');
-            document.getElementById('sidebar-overlay').classList.toggle('hidden');
-        };
+        window.switchTab = (t) => { activeTab = t; document.querySelectorAll('.nav-btn').forEach(btn => { btn.classList.add('opacity-50'); btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-lg'); }); const active = document.getElementById(`btn-${t}`); if(active) { active.classList.remove('opacity-50'); active.classList.add('bg-indigo-600', 'text-white', 'shadow-lg'); } render(); if(window.innerWidth < 1024) toggleSidebar(); };
+        window.toggleSidebar = () => { document.getElementById('sidebar').classList.toggle('-translate-x-full'); document.getElementById('sidebar-overlay').classList.toggle('hidden'); };
         window.closeModal = () => document.getElementById('modal-container').innerHTML = '';
-        window.openSearch = () => { document.getElementById('search-overlay').classList.remove('hidden'); document.getElementById('search-input').focus(); };
-        window.closeSearch = () => document.getElementById('search-overlay').classList.add('hidden');
+        window.setFilter = (c) => { filter = c; render(); };
         window.showToast = (m) => { const t = document.getElementById('toast'); t.querySelector('span').innerText = m; t.classList.remove('hidden'); setTimeout(()=>t.classList.add('hidden'), 3000); };
-        
+        window.openSearch = () => { document.getElementById('search-overlay').classList.remove('hidden'); document.getElementById('search-input').focus(); renderHistory(); lucide.createIcons(); };
+        window.closeSearch = () => { document.getElementById('search-overlay').classList.add('hidden'); };
         window.handleSearch = (q) => {
-            const res = document.getElementById('search-results');
-            if(!q.trim()) { res.innerHTML = ''; return; }
-            const filtered = products.filter(p => p.name.toLowerCase().includes(q.toLowerCase()));
-            res.innerHTML = filtered.map(p => `<div onclick="closeSearch(); openProductDetail('${p.id}')" class="p-5 bg-white/5 rounded-3xl border border-white/5 flex justify-between items-center cursor-pointer hover:bg-white/10 transition-colors"><span class="font-bold">${p.name}</span><i data-lucide="chevron-right" class="text-indigo-400"></i></div>`).join('');
+            const resL = document.getElementById('search-results-list'), histC = document.getElementById('search-history-container');
+            if (!q.trim()) { resL.classList.add('hidden'); histC.classList.remove('hidden'); renderHistory(); return; }
+            histC.classList.add('hidden'); resL.classList.remove('hidden');
+            const f = products.filter(p => p.name.toLowerCase().includes(q.toLowerCase()) || p.category.toLowerCase().includes(q.toLowerCase()));
+            resL.innerHTML = f.map(p => `<div onclick="addToHistory('${q}'); closeSearch(); openProductDetail('${p.id}')" class="p-3 flex items-center gap-4 cursor-pointer bg-white/5 rounded-2xl mb-2 hover:bg-white/10"><img src="${p.image}" class="w-14 h-14 rounded-xl object-cover"><div class="flex-1 overflow-hidden"><p class="font-bold text-white text-sm truncate">${p.name}</p><p class="text-[9px] text-indigo-400 font-black uppercase">${p.category} • ${p.classLevel || 'ALL'}</p></div><i data-lucide="chevron-right" size="18" class="opacity-20"></i></div>`).join('') || `<p class="py-20 text-center opacity-20 uppercase font-black tracking-widest text-xs">No results</p>`;
             lucide.createIcons();
         };
+        window.renderHistory = () => {
+            const c = document.getElementById('search-history-container');
+            if (searchHistory.length === 0) { c.innerHTML = `<p class="py-20 text-center opacity-20 uppercase font-black text-xs">No recent searches</p>`; return; }
+            c.innerHTML = `<p class="text-white/40 text-[10px] uppercase font-black ml-1 mb-4">Recent Searches</p><div class="space-y-2">${searchHistory.map(h => `<div onclick="fillSearch('${h}')" class="flex items-center justify-between p-4 bg-white/5 border border-white/5 rounded-2xl cursor-pointer hover:bg-white/10"><span class="text-sm font-medium text-white/80">${h}</span><i data-lucide="history" size="14" class="opacity-20"></i></div>`).join('')}</div>`;
+            lucide.createIcons();
+        };
+        window.fillSearch = (q) => { document.getElementById('search-input').value = q; handleSearch(q); };
+        window.addToHistory = (q) => { if (!q || !q.trim()) return; searchHistory = [q.trim(), ...searchHistory.filter(h => h !== q.trim())].slice(0, 5); localStorage.setItem('tsh_search_history', JSON.stringify(searchHistory)); };
 
-        // RUN IMMEDIATELY - NO WAIT
-        initialize();
-        render(); // Render INITIAL_PRODUCTS instantly
-
-        setInterval(() => {
-            currentBanner = (currentBanner + 1) % BANNERS.length;
-            if(activeTab === 'home') render();
-        }, 5000);
+        window.onload = () => { startSystem(); render(); setInterval(() => { currentBanner = (currentBanner + 1) % HUB_CONFIG.banners.length; if(activeTab === 'home') render(); }, 6000); };
     </script>
 </body>
 </html>
