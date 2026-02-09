@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEZAS SCIENCE HUB (TSH)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .animate-bounce-short { animation: bounce 1s infinite; }
+        @keyframes bounce { 0%, 100% { transform: translateY(-5%) translateX(-50%); } 50% { transform: translateY(0) translateX(-50%); } }
+    </style>
+</head>
+<body class="bg-slate-950 text-white selection:bg-indigo-500/30">
+
+    <!-- ============================================================
+    🛠️ ADMIN CONFIGURATION SECTION (Yahan Edit Karein)
+    ============================================================ -->
+    <script>
+        const SITE_SETTINGS = {
+            brandName: "TEZAS SCIENCE HUB",
+            shortName: "TSH SCIENCE",
+            tagline: "Smart Notes for Smart Minds",
+            currencySymbol: "₹"
+        };
+
+        const CATEGORIES = ['All', 'Notes', 'Mind Maps', 'PDFs'];
+
+        const BANNERS = [
+            { id: 1, title: "Master Class 10-12 Science", subtitle: "Premium handwritten notes & mind maps", color: "from-indigo-600 to-purple-600" },
+            { id: 2, title: "Ace Your Board Exams", subtitle: "Structured PDF guides for toppers", color: "from-purple-600 to-pink-600" },
+            { id: 3, title: "Visualize Your Success", subtitle: "Colorful Mind Maps for complex topics", color: "from-blue-600 to-indigo-600" }
+        ];
+
+        const PRODUCTS = [
+            { id: 'p1', name: 'Class 10 Physics Master Notes', category: 'Notes', price: 199, image: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80&w=400', description: 'Handwritten physics notes covering all chapters.' },
+            { id: 'p2', name: 'Organic Chemistry Mind Map', category: 'Mind Maps', price: 99, image: 'https://images.unsplash.com/photo-1532187875302-1df92649edde?auto=format&fit=crop&q=80&w=400', description: 'Visual map of functional groups.' },
+            { id: 'p3', name: 'Class 11 Biology PDF Guide', category: 'PDFs', price: 149, image: 'https://images.unsplash.com/photo-1530026405186-ed1f139313f8?auto=format&fit=crop&q=80&w=400', description: 'Detailed diagrams for NEET.' },
+            { id: 'p4', name: 'Mathematics Formula Sheet', category: 'PDFs', price: 49, image: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&q=80&w=400', description: 'Quick revision for Calculus.' },
+            { id: 'p5', name: 'Human Brain Handwritten', category: 'Notes', price: 129, image: 'https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&q=80&w=400', description: 'Illustrated nervous system notes.' },
+            { id: 'p6', name: 'Period Table Secrets', category: 'Mind Maps', price: 79, image: 'https://images.unsplash.com/photo-1603126857599-f6e157fa2fe6?auto=format&fit=crop&q=80&w=400', description: 'Learn trends easily.' }
+        ];
+    </script>
+
+    <!-- App Shell -->
+    <div id="app">
+        
+        <!-- Sidebar Overlay (Click to close) -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
+
+        <!-- Sidebar -->
+        <aside id="sidebar" class="fixed top-0 left-0 h-full w-72 z-50 transition-transform duration-300 -translate-x-full lg:translate-x-0 glass">
+            <div class="p-6 h-full flex flex-col">
+                <div class="flex items-center justify-between mb-10">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                            <i data-lucide="book-open" class="text-white"></i>
+                        </div>
+                        <h1 class="text-xl font-bold tracking-tight" id="sidebar-brand">TSH SCIENCE</h1>
+                    </div>
+                    <button onclick="toggleSidebar()" class="lg:hidden p-2 hover:bg-white/10 rounded-xl">
+                        <i data-lucide="x"></i>
+                    </button>
+                </div>
+                
+                <nav class="flex-1 space-y-2">
+                    <button onclick="switchTab('home')" id="btn-home" class="w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all bg-indigo-600 text-white shadow-lg">
+                        <i data-lucide="home"></i> <span class="font-medium">Explore Hub</span>
+                    </button>
+                    <button onclick="switchTab('library')" id="btn-library" class="w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all opacity-70 hover:opacity-100">
+                        <i data-lucide="library"></i> <span class="font-medium">My Library</span>
+                    </button>
+                    <button onclick="switchTab('cart')" id="btn-cart" class="w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all opacity-70 hover:opacity-100">
+                        <i data-lucide="shopping-cart"></i> <span class="font-medium">My Cart</span>
+                        <span id="cart-badge" class="ml-auto bg-pink-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full hidden">0</span>
+                    </button>
+                </nav>
+
+                <div class="mt-auto pt-6 border-t border-white/10" id="auth-container">
+                    <button onclick="simulateLogin()" class="w-full flex items-center gap-4 px-4 py-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold shadow-xl hover:scale-[1.02] transition-all">
+                        <i data-lucide="user"></i> <span>Login with Google</span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="lg:ml-72 min-h-screen flex flex-col">
+            <header class="sticky top-0 z-30 p-4 lg:px-8 flex items-center justify-between backdrop-blur-md border-b border-white/5 bg-slate-950/50">
+                <button onclick="toggleSidebar()" class="lg:hidden p-2 hover:bg-white/5 rounded-xl"><i data-lucide="menu"></i></button>
+                <div class="flex-1 text-center lg:text-left"><h2 class="text-xl md:text-2xl font-black tracking-tight" id="header-brand">TEZAS SCIENCE HUB</h2></div>
+                <button onclick="openSearch()" class="p-3 bg-white/5 border border-white/10 rounded-2xl hover:bg-indigo-600 transition-all"><i data-lucide="search"></i></button>
+            </header>
+
+            <div id="page-content" class="flex-1 p-4 lg:p-8 space-y-8 pb-24">
+                <!-- Content will be injected here -->
+            </div>
+        </main>
+
+        <!-- Mobile Bottom Nav -->
+        <div class="fixed bottom-4 left-4 right-4 h-16 bg-slate-900/90 border border-white/20 backdrop-blur-xl rounded-2xl flex items-center justify-around lg:hidden z-40 shadow-2xl">
+            <button onclick="switchTab('home')" class="p-2 opacity-100 text-indigo-500"><i data-lucide="home"></i></button>
+            <button onclick="switchTab('library')" class="p-2 opacity-40"><i data-lucide="library"></i></button>
+            <button onclick="switchTab('cart')" class="p-2 opacity-40 relative"><i data-lucide="shopping-cart"></i><span id="cart-badge-mobile" class="absolute -top-1 -right-1 w-4 h-4 bg-pink-500 text-[10px] flex items-center justify-center rounded-full font-bold hidden">0</span></button>
+            <button onclick="openSearch()" class="p-2 opacity-40"><i data-lucide="search"></i></button>
+        </div>
+    </div>
+
+    <!-- Search Overlay -->
+    <div id="search-overlay" class="fixed inset-0 z-[100] bg-slate-950/95 backdrop-blur-2xl p-6 hidden">
+        <div class="max-w-4xl mx-auto w-full">
+            <div class="flex items-center gap-4 border-b border-white/10 pb-4">
+                <i data-lucide="search" class="text-indigo-400"></i>
+                <input type="text" id="search-input" placeholder="Search notes..." class="bg-transparent text-2xl font-bold w-full outline-none" oninput="handleSearch(this.value)">
+                <button onclick="closeSearch()" class="p-2"><i data-lucide="x"></i></button>
+            </div>
+            <div id="search-results" class="mt-8 space-y-4 max-h-[70vh] overflow-y-auto pr-2 no-scrollbar"></div>
+        </div>
+    </div>
+
+    <!-- Modals (Payment, Product Detail, etc) are injected dynamically -->
+    <div id="modal-container"></div>
+
+    <!-- Toast -->
+    <div id="toast" class="hidden fixed bottom-24 left-1/2 -translate-x-1/2 z-[100] px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-3 border bg-indigo-500/90 border-indigo-400 text-white backdrop-blur-md animate-bounce-short">
+        <i id="toast-icon" data-lucide="check-circle"></i>
+        <span id="toast-msg">Success!</span>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Firebase Configuration (Integrated from user query)
+        const firebaseConfig = {
+            apiKey: "AIzaSyBGMxWchCXI-ow5yHkEnKn4APs39GeB5WM",
+            authDomain: "tejas-science-hub.firebaseapp.com",
+            projectId: "tejas-science-hub",
+            storageBucket: "tejas-science-hub.firebasestorage.app",
+            messagingSenderId: "515937082351",
+            appId: "1:515937082351:web:f99bdab6e1708c9868341a"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        
+        // App identifier for Firestore paths
+        const appId = 'tezas-science-hub';
+
+        // State Management
+        let user = null;
+        let activeTab = 'home';
+        let cart = [];
+        let purchases = [];
+        let filter = 'All';
+        let currentBanner = 0;
+        // Functions exposed to window for HTML buttons
+        window.toggleSidebar = () => {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        };
+
+        window.switchTab = (tab) => {
+            activeTab = tab;
+            render();
+            if(window.innerWidth < 1024) toggleSidebar();
+        };
+
+        window.showToast = (msg, type = 'success') => {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 3000);
+        };
+
+        window.addToCart = (id) => {
+            if (!user) return showToast("Please login first", "error");
+            const product = PRODUCTS.find(p => p.id === id);
+            if (purchases.includes(id)) return showToast("Already owned!", "error");
+            if (cart.find(item => item.id === id)) return showToast("Already in cart", "error");
+            cart.push(product);
+            updateCartBadges();
+            showToast("Added to cart");
+        };
+
+        window.removeFromCart = (id) => {
+            cart = cart.filter(item => item.id !== id);
+            updateCartBadges();
+            render();
+        };
+
+        const updateCartBadges = () => {
+            const count = cart.length;
+            const b1 = document.getElementById('cart-badge');
+            const b2 = document.getElementById('cart-badge-mobile');
+            [b1, b2].forEach(b => {
+                b.innerText = count;
+                count > 0 ? b.classList.remove('hidden') : b.classList.add('hidden');
+            });
+        };
+
+        // UI Rendering Functions
+        const render = () => {
+            const container = document.getElementById('page-content');
+            container.innerHTML = '';
+
+            if (activeTab === 'home') renderHome(container);
+            else if (activeTab === 'library') renderLibrary(container);
+            else if (activeTab === 'cart') renderCart(container);
+
+            lucide.createIcons();
+        };
+
+        const renderHome = (el) => {
+            // Banner
+            const banner = BANNERS[currentBanner];
+            el.innerHTML += `
+                <div class="relative h-48 md:h-72 rounded-[2rem] overflow-hidden shadow-2xl bg-gradient-to-br ${banner.color} p-8 md:p-16 flex items-center">
+                    <div class="max-w-xl space-y-2 md:space-y-4">
+                        <span class="inline-block px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-bold uppercase tracking-widest">Premium Education</span>
+                        <h2 class="text-2xl md:text-5xl font-black leading-tight">${banner.title}</h2>
+                        <p class="text-sm md:text-lg opacity-90">${banner.subtitle}</p>
+                    </div>
+                </div>
+                <div class="flex gap-3 overflow-x-auto pb-2 no-scrollbar">
+                    ${CATEGORIES.map(cat => `
+                        <button onclick="setCategoryFilter('${cat}')" class="whitespace-nowrap px-6 py-2.5 rounded-2xl border transition-all ${filter === cat ? 'bg-indigo-600 border-indigo-500 text-white' : 'bg-white/5 border-white/10 hover:bg-white/10'}">${cat}</button>
+                    `).join('')}
+                </div>
+                <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                    ${PRODUCTS.filter(p => filter === 'All' || p.category === filter).map(product => `
+                        <div class="group bg-white/5 border border-white/10 rounded-[2.5rem] p-4 hover:bg-white/[0.08] transition-all cursor-pointer">
+                            <div class="relative aspect-[4/3] rounded-[2rem] overflow-hidden mb-4">
+                                <img src="${product.image}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                                <div class="absolute top-4 right-4 px-3 py-1 bg-black/40 backdrop-blur-md rounded-full text-xs font-bold border border-white/20">${product.category}</div>
+                            </div>
+                            <h4 class="text-lg font-bold mb-1 truncate">${product.name}</h4>
+                            <div class="flex items-center justify-between">
+                                <span class="text-2xl font-black text-indigo-400">${SITE_SETTINGS.currencySymbol}${product.price}</span>
+                                ${purchases.includes(product.id) ? 
+                                    `<button class="bg-emerald-500/10 text-emerald-400 px-4 py-2 rounded-xl text-sm font-bold border border-emerald-500/20">Owned</button>` : 
+                                    `<button onclick="addToCart('${product.id}')" class="bg-indigo-600 hover:bg-indigo-500 text-white p-3 rounded-2xl shadow-lg transition-colors"><i data-lucide="shopping-cart"></i></button>`
+                                }
+                            </div>
+                        </div>
+                    `).join('')}
+                </section>
+            `;
+        };
+
+        const renderLibrary = (el) => {
+            el.innerHTML = `<h2 class="text-3xl font-black mb-8">My Study <span class="text-indigo-500">Vault</span></h2>`;
+            if (purchases.length === 0) {
+                el.innerHTML += `<div class="text-center py-20 bg-white/5 rounded-[3rem] border border-dashed border-white/10 opacity-50"><p>Vault is empty. Purchase notes to see them here.</p></div>`;
+                return;
+            }
+            el.innerHTML += `<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                ${PRODUCTS.filter(p => purchases.includes(p.id)).map(p => `
+                    <div class="bg-white/5 border border-white/10 p-5 rounded-[2.5rem] flex gap-5">
+                        <img src="${p.image}" class="w-24 h-24 rounded-3xl object-cover">
+                        <div class="flex-1">
+                            <h4 class="font-bold mb-1">${p.name}</h4>
+                            <button class="w-full py-2 mt-4 bg-indigo-600 text-white rounded-xl text-sm font-bold">View PDF</button>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>`;
+        };
+
+        const renderCart = (el) => {
+            el.innerHTML = `<h2 class="text-3xl font-black mb-8">Shopping <span class="text-pink-500">Cart</span></h2>`;
+            if (cart.length === 0) {
+                el.innerHTML += `<div class="text-center py-20 bg-white/5 rounded-[3rem] border border-white/10 opacity-50"><p>Your cart is empty.</p></div>`;
+                return;
+            }
+            const total = cart.reduce((s, i) => s + i.price, 0);
+            el.innerHTML += `<div class="flex flex-col lg:flex-row gap-8">
+                <div class="flex-1 space-y-4">
+                    ${cart.map(item => `
+                        <div class="bg-white/5 border border-white/10 p-4 rounded-3xl flex items-center gap-4">
+                            <img src="${item.image}" class="w-20 h-20 rounded-2xl object-cover">
+                            <div class="flex-1 truncate"><h4 class="font-bold">${item.name}</h4><p class="text-indigo-400 font-bold">${SITE_SETTINGS.currencySymbol}${item.price}</p></div>
+                            <button onclick="removeFromCart('${item.id}')" class="p-2 text-red-400"><i data-lucide="x"></i></button>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="w-full lg:w-80 bg-white/5 border border-white/10 p-6 rounded-[2.5rem]">
+                    <div class="flex justify-between text-xl font-black mb-6"><span>Total</span><span class="text-indigo-400">${SITE_SETTINGS.currencySymbol}${total}</span></div>
+                    <button onclick="simulateCheckout()" class="w-full py-4 bg-indigo-600 text-white rounded-2xl font-bold">Checkout Now</button>
+                </div>
+            </div>`;
+        };
+
+        window.setCategoryFilter = (cat) => { filter = cat; render(); };
+
+        window.simulateLogin = async () => {
+            showToast("Logging in anonymously...");
+            await signInAnonymously(auth);
+        };
+
+        window.simulateCheckout = () => {
+            document.getElementById('modal-container').innerHTML = `
+                <div class="fixed inset-0 z-[70] flex items-center justify-center p-4">
+                    <div class="absolute inset-0 bg-black/90 backdrop-blur-xl" onclick="closeModal()"></div>
+                    <div class="relative w-full max-w-md bg-slate-900 border border-white/20 rounded-[3rem] p-8 text-center animate-in slide-in-from-bottom-10">
+                        <h3 class="text-2xl font-black mb-2">Finalize Payment</h3>
+                        <div class="bg-white p-4 rounded-3xl w-48 h-48 mx-auto mb-8 flex items-center justify-center">
+                           <div class="grid grid-cols-4 gap-1 w-full h-full">${Array.from({length: 16}).map(() => `<div class="rounded-sm ${Math.random() > 0.5 ? 'bg-black' : 'bg-transparent'}"></div>`).join('')}</div>
+                        </div>
+                        <button onclick="confirmPayment()" class="w-full py-4 rounded-2xl bg-indigo-600 text-white font-bold">Confirm Pay</button>
+                    </div>
+                </div>
+            `;
+        };
+
+        window.closeModal = () => document.getElementById('modal-container').innerHTML = '';
+
+        window.confirmPayment = async () => {
+            if (!user) return showToast("Please login first", "error");
+            showToast("Processing payment...");
+            for (const item of cart) {
+                const ref = collection(db, 'artifacts', appId, 'users', user.uid, 'purchases');
+                await addDoc(ref, { productId: item.id, purchasedAt: new Date().toISOString() });
+            }
+            cart = [];
+            updateCartBadges();
+            closeModal();
+            switchTab('library');
+            showToast("Purchase successful!", "success");
+        };
+
+        // Auth Listener
+        onAuthStateChanged(auth, (u) => {
+            user = u;
+            if (u) {
+                document.getElementById('auth-container').innerHTML = `
+                    <div class="flex items-center gap-3 p-3 bg-white/5 rounded-2xl">
+                        <div class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center font-bold">U</div>
+                        <div class="overflow-hidden truncate"><p class="text-sm font-bold">Logged In</p></div>
+                    </div>
+                `;
+                // Fetch purchases
+                const ref = collection(db, 'artifacts', appId, 'users', u.uid, 'purchases');
+                onSnapshot(ref, (snap) => {
+                    purchases = snap.docs.map(doc => doc.data().productId);
+                    render();
+                });
+            }
+            render();
+        });
+        // Search logic
+        window.openSearch = () => { document.getElementById('search-overlay').classList.remove('hidden'); lucide.createIcons(); };
+        window.closeSearch = () => { document.getElementById('search-overlay').classList.add('hidden'); };
+        window.handleSearch = (query) => {
+            const results = PRODUCTS.filter(p => p.name.toLowerCase().includes(query.toLowerCase()));
+            const container = document.getElementById('search-results');
+            container.innerHTML = query ? results.map(p => `
+                <div class="p-4 bg-white/5 border border-white/10 rounded-2xl flex gap-4 cursor-pointer" onclick="closeSearch(); switchTab('home')">
+                    <img src="${p.image}" class="w-12 h-12 rounded-lg object-cover">
+                    <div><h4 class="font-bold text-sm">${p.name}</h4><p class="text-xs opacity-50">${p.category}</p></div>
+                </div>
+            `).join('') : '<p class="text-center opacity-30 mt-10">Type something to search...</p>';
+        };
+
+        // Banner Interval
+        setInterval(() => {
+            currentBanner = (currentBanner + 1) % BANNERS.length;
+            if(activeTab === 'home') render();
+        }, 5000);
+
+        // Initial Load
+        render();
+        lucide.createIcons();
+    </script>
+</body>
+</html>
